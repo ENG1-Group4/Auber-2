@@ -13,7 +13,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.World;
-
+//<changed>
+import org.json.JSONObject;
+//</changed>
 
 /**
  * The GameEntity class is the abstract class from which all entities, including the player must
@@ -37,7 +39,22 @@ public abstract class GameEntity {
   public float rotation = 0f;
 
   private float[][] collisionOffsets;
-
+  //<changed> id stuff added so entities can be relinked on save/load
+  private int id;
+  private static int curId = 0;
+  private static int nextId(){
+    curId ++;
+    return curId -1;
+  }
+  @Override //so prior equals methods work
+  public boolean equals(Object other){
+    if (other instanceof GameEntity){
+      GameEntity gameEntity = (GameEntity) other;
+      return this.id == gameEntity.id;
+    } else{
+      return false;
+    }
+  }
   /**
    * Initialise a game entity at a given x and y coordinates.
    *
@@ -46,7 +63,10 @@ public abstract class GameEntity {
    * @param sprite The sprite the entity should use
    * */
   public GameEntity(float x, float y, Sprite sprite) {
-    this.sprite = sprite; 
+    this(x, y, sprite,nextId());
+  }
+  public GameEntity(float x, float y, Sprite sprite,int id) {
+    this.sprite = sprite;
     sprite.setOriginCenter();
 
     position = new Vector2(x, y);
@@ -57,9 +77,10 @@ public abstract class GameEntity {
         {sprite.getWidth() - 2f, 2f},
         {2f, sprite.getHeight() - 2f},
         {sprite.getWidth() - 2f, sprite.getHeight() - 2f}
-      };
+    };
+    this.id = id;
   }
-
+  //</changed>
   /**
    * Render the entity at its current coordinates with its current rotation.
    *
@@ -190,4 +211,13 @@ public abstract class GameEntity {
   public Vector2 getCenter() {
     return new Vector2(getCenterX(), getCenterY());
   }
+  //<changed>
+  public JSONObject toJSON(){
+    JSONObject gameEntity = new JSONObject();
+    gameEntity.put("x",position.x);
+    gameEntity.put("y",position.y);
+    gameEntity.put("id",id)
+    return gameEntity;
+  }
+  //</changed>
 }

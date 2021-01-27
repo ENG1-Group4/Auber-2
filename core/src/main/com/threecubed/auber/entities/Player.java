@@ -16,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.TimeUtils;
+import org.json.JSONObject;
 //</changed>
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
@@ -316,6 +317,17 @@ public class Player extends GameEntity {
         health -= amount;
       }
     }
+  }
+  public JSONObject toJSON(){
+    JSONObject player = super.toJSON();
+    player.put("health",health);
+    player.put("shield",shield);
+    player.put("confused",confused);
+    player.put("slowed",slowed);
+    player.put("blinded",blinded);
+    player.put("fast",fast);
+    player.put("invinc",invinc);
+    return player;
   }
   //</changed>
 }

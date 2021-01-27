@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 
+import org.json.JSONObject;
+
 
 /**
  * The infiltrator is the enemy of the game, it will navigate from system to system and sabotage
@@ -74,6 +76,7 @@ public class Infiltrator extends Npc {
 
   @Override
   public void handleTeleporterShot(final World world) {
+    if (!aiEnabled) {return;}//<changed> prevents attacked in brig bugs
     if (state == States.ATTACKING_SYSTEM) {
       RectangleMapObject system = getNearbyObjects(World.map);
       if (system != null) {
@@ -166,5 +169,12 @@ public class Infiltrator extends Npc {
     Projectile projectile = new Projectile(getCenterX(), getCenterY(), projectileVelocity, this,
         Projectile.CollisionActions.randomAction(), world);
     world.queueEntityAdd(projectile);
-  } 
+  }
+  //<changed>
+  public JSONObject toJSON(){
+    JSONObject infiltrator = super.toJSON();
+    infiltrator.put("exposed",exposed);
+    return infiltrator;
+  }
+  //</changed>
 }

@@ -4,6 +4,8 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 
+import org.json.JSONObject;
+
 /**
  * The Power up which can be picked up by the player.
  *
@@ -157,4 +159,11 @@ public class PowerUp extends GameEntity {
       }
     }
   }
+  //<changed>
+  public JSONObject toJSON(){
+    JSONObject powerUp = super.toJSON();
+    powerUp.put("powerUpEffect",powerUpEffect.name());
+    return powerUp;
+  }
+  //</changed>
 }

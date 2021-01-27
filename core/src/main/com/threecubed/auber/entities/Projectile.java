@@ -5,7 +5,9 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.World;
-
+//<changed>
+import org.json.JSONObject;
+//</changed>
 
 public class Projectile extends GameEntity {
   CollisionActions collisionAction;
@@ -121,4 +123,16 @@ public class Projectile extends GameEntity {
       }
     }, World.AUBER_DEBUFF_TIME - 3f);
   }
+  //<changed>
+  public JSONObject toJSON(){
+    JSONObject projectile = super.toJSON();
+    projectile.put("collisionAction",collisionAction.name());
+    JSONObject velocity = new JSONObject();
+    velocity.put("x",this.velocity.x);
+    velocity.put("y",this.velocity.y);
+    projectile.put("velocity",velocity);
+    projectile.put("originEntity",originEntity.toJSON());
+    return projectile;
+  }
+  //</changed>
 }

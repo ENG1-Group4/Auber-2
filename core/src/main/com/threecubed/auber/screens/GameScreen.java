@@ -14,9 +14,12 @@ import com.threecubed.auber.entities.Civilian;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Infiltrator;
 import com.threecubed.auber.entities.Player;
+import com.threecubed.auber.entities.PowerUp;
+import com.threecubed.auber.entities.Projectile;
 import com.threecubed.auber.ui.GameUi;
 //<changed>
 import com.badlogic.gdx.audio.Music;
+import org.json.*;
 //</changed>
 
 
@@ -135,4 +138,40 @@ public class GameScreen extends ScreenAdapter {
     world.renderer.dispose();
     ambience.dispose();
   }
+  //<changed>
+  public void saveGame(){
+    JSONObject store = new JSONObject();
+    JSONArray civilians = new JSONArray();
+    JSONArray infiltrators = new JSONArray();
+    JSONArray powerUps = new JSONArray();
+    JSONArray projectiles = new JSONArray();
+    for (GameEntity entity : world.getEntities()) {
+      if (entity instanceof Player){
+        Player _player = (Player) entity;
+        store.put("player",_player.toJSON());
+      }
+      if (entity instanceof Civilian){
+        Civilian _civilian = (Civilian) entity;
+        civilians.put(_civilian.toJSON());
+      }
+      if (entity instanceof Infiltrator){
+        Infiltrator _infiltrator = (Infiltrator) entity;
+        infiltrators.put(_infiltrator.toJSON());
+      }
+      if (entity instanceof PowerUp){
+        PowerUp _powerUp = (PowerUp) entity;
+        powerUps.put(_powerUp.toJSON());
+      }
+      if (entity instanceof Projectile){
+        Projectile _projectile = (Projectile) entity;
+        projectiles.put(_projectile.toJSON());
+      }
+    }
+    store.put("civilians",civilians);
+    store.put("infiltrators",infiltrators);
+    store.put("powerUps",powerUps);
+    store.put("projectiles",projectiles);
+    store.put("world",world.toJSON());
+  }
+  //</changed>
 }
