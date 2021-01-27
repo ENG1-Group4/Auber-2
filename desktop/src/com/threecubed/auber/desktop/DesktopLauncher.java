@@ -10,8 +10,8 @@ public class DesktopLauncher {
     config.title = "Auber";
     //<changed>
     config.width = 1920;
-		config.height = 1080;
-		config.fullscreen = true;
+    config.height = 1080;
+    config.fullscreen = true;
     config.forceExit = false;
     //</changed>
     new LwjglApplication(new AuberGame(), config);

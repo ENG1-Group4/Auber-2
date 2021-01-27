@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.threecubed.auber.AuberGame;
-
+//<changed>
+import com.badlogic.gdx.audio.Sound;
+//</changed>
 
 /**
  * The game over screen is the screen that the game is set to when a win/lose condition has been
@@ -26,6 +28,10 @@ public class GameOverScreen extends ScreenAdapter {
   GlyphLayout layout = new GlyphLayout();
   String resultText;
 
+  //<changed>
+  private Sound gameOver = Gdx.audio.newSound(Gdx.files.internal("audio/gameOver.wav"));
+  //</changed>
+
   /**
    * Instantiate the screen with an {@link AuberGame} object.
    *
@@ -41,6 +47,7 @@ public class GameOverScreen extends ScreenAdapter {
       resultText += "win!";
     } else {
       resultText += "lose.";
+      gameOver.play(0.5f);
     }
     resultText += "\nPress \"Escape\" to return to the menu";
     layout.setText(font, resultText);

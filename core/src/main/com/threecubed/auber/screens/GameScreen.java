@@ -23,7 +23,7 @@ import com.badlogic.gdx.audio.Music;
 /**
  * The main screen of the game, responsible for rendering entities and executing their functions.
  *
- * @author Daniel O'Brien
+ * @author Daniel O'Brien, Bogdan Bodnariu-Lescinschi
  * @version 1.0
  * @since 1.0
  * */
@@ -56,7 +56,7 @@ public class GameScreen extends ScreenAdapter {
     //<changed>
     ambience.play();
     ambience.setLooping(true);
-    ambience.setVolume(0.7f);
+    ambience.setVolume(0.95f);
     //</changed>
 
     for (int i = 0; i < World.MAX_INFILTRATORS_IN_GAME; i++) {
@@ -71,7 +71,7 @@ public class GameScreen extends ScreenAdapter {
   }
 
   @Override
-  public void render(float delta) {
+  public void render(float deltaTime) {
     if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
       //<changed>
       ambience.stop();
