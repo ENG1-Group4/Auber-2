@@ -118,17 +118,17 @@ public class World {
   public float auberTeleporterCharge = 0f;
   /** The rate at which the teleporter ray charges. */
   //<changed removed "final" from difficulty effected values>
-  public static float AUBER_CHARGE_RATE = 0.05f;
+  public static float AUBER_CHARGE_RATE;
   /** The time the ray should visibly render for. */
   public static final float AUBER_RAY_TIME = 0.25f;
   /** The time a debuff should last for (with the exception of blindness). */
-  public static float AUBER_DEBUFF_TIME = 5f;
+  public static float AUBER_DEBUFF_TIME;
   //<changed added>
   /** The time a buff should last for (with the exception of shield and health). */
-  public static float AUBER_BUFF_TIME = 10f;
+  public static float AUBER_BUFF_TIME;
   //</changed>
   /** The rate at which auber should heal. */
-  public static float AUBER_HEAL_RATE = 0.005f;
+  public static float AUBER_HEAL_RATE;
   //</changed>
   public static final Color rayColorA = new Color(0.106f, 0.71f, 0.714f, 1f);
   public static final Color rayColorB = new Color(0.212f, 1f, 1f, 0.7f);
@@ -200,50 +200,50 @@ public class World {
   }
 //<changed removed "final" from difficulty effected values>
   /** The amount of time it takes for an infiltrator to sabotage a system. */
-  public static float SYSTEM_BREAK_TIME = 5f;
+  public static float SYSTEM_BREAK_TIME;
   /** The chance an infiltrator will sabotage after pathfinding to a system. */
-  public static float SYSTEM_SABOTAGE_CHANCE = 0.6f;
+  public static float SYSTEM_SABOTAGE_CHANCE;
   /** The distance the infiltrator can see. Default: 5 tiles */
-  public static float INFILTRATOR_SIGHT_RANGE = 80f;
+  public static float INFILTRATOR_SIGHT_RANGE;
   /** The speed at which infiltrator projectiles should travel. */
-  public static float INFILTRATOR_PROJECTILE_SPEED = 4f;
+  public static float INFILTRATOR_PROJECTILE_SPEED;
   /** Maximum infiltrators in a full game of Auber (including defated ones). */
-  public static int MAX_INFILTRATORS = 8;
+  public static int MAX_INFILTRATORS;
   /** The interval at which the infiltrator should attack the player when exposed. */
-  public static float INFILTRATOR_FIRING_INTERVAL = 5f;
+  public static float INFILTRATOR_FIRING_INTERVAL;
   /** The damage a projectile should do. */
-  public static float INFILTRATOR_PROJECTILE_DAMAGE = 0.2f;
+  public static float INFILTRATOR_PROJECTILE_DAMAGE;
   /**
    * Max infiltrators alive at a given point, Should always be greater or equal to
    * {@link World#MAX_INFILTRATORS}.
    * */
-  public static int MAX_INFILTRATORS_IN_GAME = 3;
+  public static int MAX_INFILTRATORS_IN_GAME;
 
   /** The amount of variance there should be between the speeds of different NPCs. */
-  public static float[] NPC_SPEED_VARIANCE = {0.8f, 1.2f};
+  public static float[] NPC_SPEED_VARIANCE;
   /** The maximum amount of time (in seconds) an NPC should flee for. */
-  public static float NPC_FLEE_TIME = 10f;
+  public static float NPC_FLEE_TIME;
   /** The speed multiplier an NPC should receive when fleeing. */
-  public static float NPC_FLEE_MULTIPLIER = 1.2f;
+  public static float NPC_FLEE_MULTIPLIER;
   /** The shortest distance an NPC should move from its current position when fleeing. */
-  public static float NPC_MIN_FLEE_DISTANCE = 80f;
+  public static float NPC_MIN_FLEE_DISTANCE;
   /** The distance an NPC can here the teleporter ray shoot from. */
-  public static float NPC_EAR_STRENGTH = 80f;
+  public static float NPC_EAR_STRENGTH;
   /** The number of NPCs in the game. */
-  public static int NPC_COUNT = 24;
+  public static int NPC_COUNT;
 
   /** the speed multiplier from being slowed */
-  public static float PROJECTILE_SLOW_MULT = 0.5f;
+  public static float PROJECTILE_SLOW_MULT;
 
   //<changed>
   /** The health gain from a health powerup */
-  public static float POWERUP_HEALTH_AMOUNT = 0.5f;
+  public static float POWERUP_HEALTH_AMOUNT;
   /** The shield gain from a shield powerup */
-  public static int POWERUP_SHIELD_AMOUNT = 1;
+  public static int POWERUP_SHIELD_AMOUNT;
   /** The speed multiplier from a speed powerup */
-  public static float POWERUP_SPEED_MULT = 2f;
+  public static float POWERUP_SPEED_MULT;
   /** */
-  public static float POWERUP_BOOM_RANGE = 160f;
+  public static float POWERUP_BOOM_RANGE;
   //</changed>
   //</changed>
   public static enum SystemStates {
@@ -498,4 +498,16 @@ public class World {
       game.setScreen(new GameOverScreen(game, true));
     }
   }
+  //<changed>
+  public JSONObject toJSON(){
+    JSONObject world = new JSONObject();
+    for (String difficulty : gameData.keySet()) {
+      if (gameData.get(difficulty).equals(difficultyData)){
+        world.put("difficulty",difficulty);
+        break;
+      }
+    }
+    
+  }
+  //</changed>
 }
