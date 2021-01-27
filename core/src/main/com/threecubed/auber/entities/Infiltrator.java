@@ -8,19 +8,28 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
+//<changed>
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+//</changed>
 
 
 /**
  * The infiltrator is the enemy of the game, it will navigate from system to system and sabotage
  * them until caught by the {@link Player}.
  *
- * @author Daniel O'Brien, Adam
+ * @author Daniel O'Brien, Adam Wiegand, Bogdan Bodnariu-Lescinschi
  * @version 2.0
  * @since 1.0
  * */
 public class Infiltrator extends Npc {
   public boolean exposed = false;
   Sprite unexposedSprite;
+  //<changed>
+  private Sound infiltratorHurt = Gdx.audio.newSound(Gdx.files.internal("audio/infiltratorHurt.mp3"));
+  private Sound systemError = Gdx.audio.newSound(Gdx.files.internal("audio/systemError.wav"));
+  private Sound systemDestroyed = Gdx.audio.newSound(Gdx.files.internal("audio/systemDestroyed.wav"));
+  //</changed>
 
   /**
    * Initialise an infiltrator at given coordinates.
@@ -66,6 +75,9 @@ public class Infiltrator extends Npc {
           && Utils.randomFloatInRange(world.randomNumberGenerator, 0, 1)
           < World.SYSTEM_SABOTAGE_CHANCE) {
         attackNearbySystem(world);
+        //<changed>
+        systemError.play(0.2f);
+        //</changed>
       } else {
         idleForGivenTime(world, Utils.randomFloatInRange(world.randomNumberGenerator, 5f, 8f));
       }
@@ -74,6 +86,9 @@ public class Infiltrator extends Npc {
 
   @Override
   public void handleTeleporterShot(final World world) {
+    //<changed>
+    infiltratorHurt.play(0.25f);
+    //</changed>
     if (state == States.ATTACKING_SYSTEM) {
       RectangleMapObject system = getNearbyObjects(World.map);
       if (system != null) {
@@ -127,6 +142,9 @@ public class Infiltrator extends Npc {
           if (aiEnabled) {
             world.updateSystemState(system.getRectangle().getX(), system.getRectangle().getY(),
                 World.SystemStates.DESTROYED);
+            //<changed>
+            systemDestroyed.play(0.4f);
+            //</changed>
             navigateToRandomSystem(world);
           }
         }

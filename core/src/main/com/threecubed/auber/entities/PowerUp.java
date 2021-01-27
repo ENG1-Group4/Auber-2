@@ -3,16 +3,24 @@ package com.threecubed.auber.entities;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
+//<changed>
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+//</changed>
 
 /**
  * The Power up which can be picked up by the player.
  *
- * @author Adam Wiegand
+ * @author Adam Wiegand, Bogdan Bodnariu-Lescinschi
  * @version 0.0
  * @since 2.0
  * */
 public class PowerUp extends GameEntity {
   PowerUpEffect powerUpEffect;
+
+  private Sound powerupPing = Gdx.audio.newSound(Gdx.files.internal("audio/powerupPing.mp3"));
+  private Sound powerupBoom = Gdx.audio.newSound(Gdx.files.internal("audio/powerupBoom.wav"));
+
   public static enum PowerUpEffect {
     SHIELD,
     HEAL,
@@ -69,22 +77,27 @@ public class PowerUp extends GameEntity {
     switch (powerUpEffect) {
       case SHIELD:
         shieldPlayer(world,world.POWERUP_SHIELD_AMOUNT);
+        powerupPing.play(0.3f);
         world.queueEntityRemove(this);
         break;
       case HEAL:
         healPlayer(world,World.POWERUP_HEALTH_AMOUNT);
+        powerupPing.play(0.3f);
         world.queueEntityRemove(this);
         break;
       case SPEED:
         speedPlayer(world);
+        powerupPing.play(0.3f);
         world.queueEntityRemove(this);
         break;
       case INVINC:
         invincPlayer(world);
+        powerupPing.play(0.3f);
         world.queueEntityRemove(this);
         break;
       case BOOM:
         boom(world);
+        powerupBoom.play(0.9f);
         break;
       default:
         break;
