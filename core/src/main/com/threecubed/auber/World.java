@@ -42,13 +42,9 @@ public class World {
 
   public boolean demoMode = false;
 //<changed>
-  private static JSONObject gameData;
+  private static JSONObject gameData = new JSONObject(Gdx.files.internal("difficulty.json").readString());
   private static JSONObject difficultyData;
-  public static void load_data() {
-    gameData = new JSONObject(Gdx.files.internal("difficulty.json").readString());
-  }
   public static void changeDifficulty(String difficulty){
-    if (gameData == null){load_data();}
     difficultyData = (JSONObject) gameData.get(difficulty);
     setValues();
   }
@@ -99,9 +95,9 @@ public class World {
 
   public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map);
 
-  public ArrayList<RectangleMapObject> systems = new ArrayList<>();
+  public ArrayList<RectangleMapObject> systems;
   public RectangleMapObject medbay;
-  public ArrayList<float[]> spawnLocations = new ArrayList<>();
+  public ArrayList<float[]> spawnLocations;
 
   public final Random randomNumberGenerator = new Random();
 
@@ -109,7 +105,7 @@ public class World {
   public final NavigationMesh navigationMesh = new NavigationMesh(
       (TiledMapTileLayer) map.getLayers().get("navigation_layer")
       );
-  public ArrayList<float[]> fleePoints = new ArrayList<>();
+  public ArrayList<float[]> fleePoints;
 
   /** Coordinates for the bottom left and top right tiles of the brig. */
   public static final float[][] BRIG_BOUNDS = {{240f, 608f}, {352f, 640f}};
@@ -271,6 +267,7 @@ public class World {
     queueEntityAdd(player);
     this.player = player;
 
+    systems = new ArrayList<>();
     MapObjects objects = map.getLayers().get("object_layer").getObjects();
     for (MapObject object : objects) {
       if (object instanceof RectangleMapObject) {
@@ -287,7 +284,8 @@ public class World {
         }
       }
     }
-
+    spawnLocations = new ArrayList<>();
+    fleePoints = new ArrayList<>();
     TiledMapTileLayer navigationLayer = (TiledMapTileLayer) map.getLayers().get("navigation_layer");
     for (int y = 0; y < navigationLayer.getHeight(); y++) {
       for (int x = 0; x < navigationLayer.getWidth(); x++) {
@@ -509,7 +507,7 @@ public class World {
         break;
       }
     }
-    world.put("player",player.toString());
+    world.put("player",player.toJSON());
     world.put("auberTeleporterCharge",auberTeleporterCharge);
     world.put("infiltratorCount",infiltratorCount);
     world.put("infiltratorsAddedCount",infiltratorsAddedCount);
@@ -518,7 +516,7 @@ public class World {
     for (RectangleMapObject _system : this.systems) {
       JSONObject system = new JSONObject();
       system.put("x",_system.getRectangle().getX());
-      system.put("x",_system.getRectangle().getY());
+      system.put("y",_system.getRectangle().getY());
       system.put("state",getSystemState(_system).name());
       systems.put(system);
     }
@@ -538,13 +536,15 @@ public class World {
     // Configure the camera
     camera.setToOrtho(false, 480, 270);
     camera.update();
-    
+    //stored info
+    changeDifficulty(world.getString("difficulty"));
     this.player = new Player(world.getJSONObject("player"),this);
     queueEntityAdd(player);
     auberTeleporterCharge = world.getFloat("auberTeleporterCharge");
     infiltratorCount = world.getInt("infiltratorCount");
     infiltratorsAddedCount = world.getInt("infiltratorsAddedCount");
     //systems
+    systems = new ArrayList<>();
     MapObjects objects = map.getLayers().get("object_layer").getObjects();
     for (MapObject object : objects) {
       if (object instanceof RectangleMapObject) {
@@ -578,6 +578,8 @@ public class World {
       }
     }
     //navigation
+    spawnLocations = new ArrayList<>();
+    fleePoints = new ArrayList<>();
     TiledMapTileLayer navigationLayer = (TiledMapTileLayer) map.getLayers().get("navigation_layer");
     for (int y = 0; y < navigationLayer.getHeight(); y++) {
       for (int x = 0; x < navigationLayer.getWidth(); x++) {

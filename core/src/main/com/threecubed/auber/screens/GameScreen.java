@@ -188,7 +188,7 @@ public class GameScreen extends ScreenAdapter {
     store.put("world", world.toJSON());
     FileHandle file = Gdx.files.local("saves.json");
     JSONObject saves = new JSONObject(file.readString());
-    saves.put(name,file);
+    saves.put(name,store);
     file.writeString(saves.toString(), false);
   }
   /**
@@ -198,11 +198,12 @@ public class GameScreen extends ScreenAdapter {
    * @param name    the name of the file which should be loaded from
    */
   public GameScreen(AuberGame game,String name){
-    JSONObject saves = new JSONObject(Gdx.files.local("saves.json").readString());
-    JSONObject store = saves.getJSONObject(name);
     this.game = game;
     ui = new GameUi(game);
+    stars = game.atlas.createSprite("stars");
 
+    JSONObject saves = new JSONObject(Gdx.files.local("saves.json").readString());
+    JSONObject store = saves.getJSONObject(name);
     world = new World(game, store.getJSONObject("world"));
     JSONArray civilians = store.getJSONArray("civilians");
     for (Object object : civilians) {
@@ -224,7 +225,7 @@ public class GameScreen extends ScreenAdapter {
       JSONObject projectile = (JSONObject) object;
       world.addEntity(new Projectile(projectile,world));
     }
-    world.updateEntities();;
+    //world.updateEntities();
     ambience.play();
     ambience.setLooping(true);
     ambience.setVolume(0.7f);

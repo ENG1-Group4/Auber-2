@@ -347,6 +347,8 @@ public abstract class Npc extends GameEntity {
       currentPath.add(new Vector2(vector2.getFloat("x"),vector2.getFloat("y")));
     }
     aiEnabled = npc.getBoolean("aiEnabled");
+    textureName = npc.getString("textureName");
+    this.navigationMesh = world.navigationMesh;
   }
   //</changed>
 }

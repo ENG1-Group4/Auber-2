@@ -179,6 +179,7 @@ public class Infiltrator extends Npc {
   public Infiltrator(JSONObject infiltrator,World world){
     super(infiltrator, world);
     exposed = infiltrator.getBoolean("exposed");
+    unexposedSprite = new Sprite(sprite);
   }
   //</changed>
 }
