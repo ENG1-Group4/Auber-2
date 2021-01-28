@@ -569,6 +569,14 @@ public class World {
       newVs.add(new Vector2(jsystem.getFloat("x"),jsystem.getFloat("y")));
       newStates.add(SystemStates.valueOf(jsystem.getString("state")));
     }
+    for (int i = systems.size() -1; i >= 0; i -= 1) {
+      Vector2 oldV = new Vector2(systems.get(i).getRectangle().getX(),systems.get(i).getRectangle().getY());
+      if (newVs.contains(oldV)){
+        updateSystemState(oldV.x, oldV.y, newStates.get(newVs.indexOf(oldV)));
+      }else{
+        updateSystemState(oldV.x, oldV.y, SystemStates.DESTROYED);
+      }
+    }
     for (RectangleMapObject system : systems) {
       Vector2 oldV = new Vector2(system.getRectangle().getX(),system.getRectangle().getY());
       if (newVs.contains(oldV)){
