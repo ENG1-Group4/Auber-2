@@ -143,6 +143,10 @@ public class MenuScreen extends ScreenAdapter {
   public void render(float delta) {
     if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
       game.setScreen(new GameScreen(game, true));
+      //<changed>
+      menuMusic.stop();
+      menuSelect.play(0.3f);
+      //</changed>
     }
     //<changed>
     if (delay > 0){delay -= 1;}
