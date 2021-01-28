@@ -165,5 +165,9 @@ public class PowerUp extends GameEntity {
     powerUp.put("powerUpEffect",powerUpEffect.name());
     return powerUp;
   }
+  public PowerUp(JSONObject powerUp,World world){
+    super(powerUp, world.atlas.createSprite(spriteName(PowerUpEffect.valueOf(powerUp.getString("powerUpEffect")))));
+    powerUpEffect = PowerUpEffect.valueOf(powerUp.getString("powerUpEffect"));
+  }
   //</changed>
 }

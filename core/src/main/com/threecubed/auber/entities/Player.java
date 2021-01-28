@@ -329,5 +329,22 @@ public class Player extends GameEntity {
     player.put("invinc",invinc);
     return player;
   }
+  /**
+   * Creates a player from a given state
+   * 
+   * @param player   the JSONObject of player
+   * @param world    the world
+   */
+  public Player(JSONObject player,World world){
+    super(player,world.atlas.createSprite("player"));
+    health = player.getFloat("health");
+    shield = player.getInt("shield");
+    confused = player.getBoolean("confused");
+    slowed = player.getBoolean("slowed");
+    blinded = player.getBoolean("blinded");
+    fast = player.getBoolean("fast");
+    invinc = player.getBoolean("invinc");
+    //TODO add scheduling stuff
+  }
   //</changed>
 }

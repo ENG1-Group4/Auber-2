@@ -338,5 +338,15 @@ public abstract class Npc extends GameEntity {
     npc.put("aiEnabled",aiEnabled);
     return npc;
   }
+  public Npc(JSONObject npc,World world){
+    super(npc, world.atlas.createSprite(npc.getString("textureName")));
+    maxSpeed = npc.getFloat("maxSpeed");
+    state = States.valueOf(npc.getString("state"));
+    for (Object object : npc.getJSONArray("currentPath")) {
+      JSONObject vector2 = (JSONObject) object;
+      currentPath.add(new Vector2(vector2.getFloat("x"),vector2.getFloat("y")));
+    }
+    aiEnabled = npc.getBoolean("aiEnabled");
+  }
   //</changed>
 }

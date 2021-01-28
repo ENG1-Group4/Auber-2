@@ -1,5 +1,8 @@
 package com.threecubed.auber.entities;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -46,6 +49,7 @@ public abstract class GameEntity {
     curId ++;
     return curId -1;
   }
+  private static Hashtable<Integer,GameEntity> entities = new Hashtable();
   @Override //so prior equals methods work
   public boolean equals(Object other){
     if (other instanceof GameEntity){
@@ -79,6 +83,7 @@ public abstract class GameEntity {
         {sprite.getWidth() - 2f, sprite.getHeight() - 2f}
     };
     this.id = id;
+    entities.replace(id, this);
   }
   //</changed>
   /**
@@ -216,8 +221,24 @@ public abstract class GameEntity {
     JSONObject gameEntity = new JSONObject();
     gameEntity.put("x",position.x);
     gameEntity.put("y",position.y);
-    gameEntity.put("id",id)
+    gameEntity.put("id",id);
     return gameEntity;
+  }
+  public static GameEntity idCheck(int id){
+    if (entities.keySet().contains(id)){
+      return entities.get(id);
+    } else {
+      throw new IllegalArgumentException("Id not found");
+    }
+  }
+  /**
+   * Creates a player from a given state
+   * 
+   * @param gameEntity   the JSONObject of the gameEntity
+   * @param sprite    the sprite to use
+   */
+  public GameEntity(JSONObject gameEntity,Sprite sprite){
+    this(gameEntity.getFloat("x"),gameEntity.getFloat("y"),sprite,gameEntity.getInt("id"));
   }
   //</changed>
 }

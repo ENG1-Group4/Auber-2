@@ -1,4 +1,5 @@
 package com.threecubed.auber;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;//<changed/>
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
@@ -117,7 +119,7 @@ public class World {
   // --------------------AUBER-------------------
   public float auberTeleporterCharge = 0f;
   /** The rate at which the teleporter ray charges. */
-  //<changed removed "final" from difficulty effected values>
+  //<changed removed "final" from difficulty effected values + removed values>
   public static float AUBER_CHARGE_RATE;
   /** The time the ray should visibly render for. */
   public static final float AUBER_RAY_TIME = 0.25f;
@@ -198,7 +200,7 @@ public class World {
       throw new IllegalArgumentException("Tile of given ID not found.");
     }
   }
-//<changed removed "final" from difficulty effected values>
+//<changed removed "final" from difficulty effected values> + removed values
   /** The amount of time it takes for an infiltrator to sabotage a system. */
   public static float SYSTEM_BREAK_TIME;
   /** The chance an infiltrator will sabotage after pathfinding to a system. */
@@ -220,7 +222,7 @@ public class World {
   public static int MAX_INFILTRATORS_IN_GAME;
 
   /** The amount of variance there should be between the speeds of different NPCs. */
-  public static float[] NPC_SPEED_VARIANCE;
+  public static float[] NPC_SPEED_VARIANCE = {0.8f, 1.2f};//kept to be writen over
   /** The maximum amount of time (in seconds) an NPC should flee for. */
   public static float NPC_FLEE_TIME;
   /** The speed multiplier an NPC should receive when fleeing. */
@@ -507,7 +509,95 @@ public class World {
         break;
       }
     }
+    world.put("player",player.toString());
+    world.put("auberTeleporterCharge",auberTeleporterCharge);
+    world.put("infiltratorCount",infiltratorCount);
+    world.put("infiltratorsAddedCount",infiltratorsAddedCount);
+    world.put("demoMode",demoMode);
+    JSONArray systems = new JSONArray();
+    for (RectangleMapObject _system : this.systems) {
+      JSONObject system = new JSONObject();
+      system.put("x",_system.getRectangle().getX());
+      system.put("x",_system.getRectangle().getY());
+      system.put("state",getSystemState(_system).name());
+      systems.put(system);
+    }
+    world.put("systems",systems);
+    return world;
+  }
+  /**
+   * Creates a world from a given state
+   * 
+   * @param game    The game object
+   * @param world    the JSONObject
+   */
+  public World(AuberGame game,JSONObject world){
+    this.game = game;
+    atlas = game.atlas;
+
+    // Configure the camera
+    camera.setToOrtho(false, 480, 270);
+    camera.update();
     
+    this.player = new Player(world.getJSONObject("player"),this);
+    queueEntityAdd(player);
+    auberTeleporterCharge = world.getFloat("auberTeleporterCharge");
+    infiltratorCount = world.getInt("infiltratorCount");
+    infiltratorsAddedCount = world.getInt("infiltratorsAddedCount");
+    //systems
+    MapObjects objects = map.getLayers().get("object_layer").getObjects();
+    for (MapObject object : objects) {
+      if (object instanceof RectangleMapObject) {
+        RectangleMapObject rectangularObject = (RectangleMapObject) object;
+        switch (rectangularObject.getProperties().get("type", String.class)) {
+          case "system":
+            systems.add(rectangularObject);
+            break;
+          case "medbay":
+            medbay = rectangularObject;
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    JSONArray jsystems = world.getJSONArray("systems");
+    ArrayList<Vector2> newVs = new ArrayList();
+    ArrayList<SystemStates> newStates = new ArrayList();
+    for (int i = 0; i < jsystems.length(); i++) {
+      JSONObject jsystem = jsystems.getJSONObject(i);
+      newVs.add(new Vector2(jsystem.getFloat("x"),jsystem.getFloat("y")));
+      newStates.add(SystemStates.valueOf(jsystem.getString("state")));
+    }
+    for (RectangleMapObject system : systems) {
+      Vector2 oldV = new Vector2(system.getRectangle().getX(),system.getRectangle().getY());
+      if (newVs.contains(oldV)){
+        updateSystemState(oldV.x, oldV.y, newStates.get(newVs.indexOf(oldV)));
+      }else{
+        updateSystemState(oldV.x, oldV.y, SystemStates.DESTROYED);
+      }
+    }
+    //navigation
+    TiledMapTileLayer navigationLayer = (TiledMapTileLayer) map.getLayers().get("navigation_layer");
+    for (int y = 0; y < navigationLayer.getHeight(); y++) {
+      for (int x = 0; x < navigationLayer.getWidth(); x++) {
+        Cell currentCell = navigationLayer.getCell(x, y);
+        float[] cellCoordinates = {x * navigationLayer.getTileWidth(),
+                                   y * navigationLayer.getTileHeight()};
+        if (currentCell != null) {
+          spawnLocations.add(cellCoordinates);
+          if (currentCell.getTile().getId() == Tiles.FLEE_POINT.tileId) {
+            fleePoints.add(cellCoordinates);
+          }
+        }
+      }
+    }
+    //demomode
+    this.demoMode = world.getBoolean("demoMode");
+    if (demoMode) {
+      camera.setToOrtho(false, 1920, 1080);
+      player.sprite.setColor(1f, 1f, 1f, 0f);
+    }
   }
   //</changed>
 }
