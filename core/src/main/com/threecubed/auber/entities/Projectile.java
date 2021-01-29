@@ -139,7 +139,7 @@ public class Projectile extends GameEntity {
     collisionAction = CollisionActions.valueOf(projectile.getString("collisionAction"));
     JSONObject velocity = projectile.getJSONObject("velocity");
     this.velocity = new Vector2(velocity.getFloat("x"),velocity.getFloat("y"));
-    originEntity = GameEntity.idCheck(projectile.getJSONObject("originEntity").getInt("id"));
+    originEntity = Infiltrator.idCheck(projectile.getJSONObject("originEntity").getInt("id"));
   }
   //</changed>
 }

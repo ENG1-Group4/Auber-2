@@ -92,6 +92,9 @@ public class GameScreen extends ScreenAdapter {
     if (Gdx.input.isKeyPressed(Input.Keys.F5)) {
       saveGame(java.util.Calendar.getInstance().getTime().toString());
     }
+    if (Gdx.input.isKeyPressed(Input.Keys.F8)) {
+      ambience.pause();
+    }
     // </changed>
     // Add any queued entities
     world.updateEntities();
@@ -225,7 +228,6 @@ public class GameScreen extends ScreenAdapter {
       JSONObject projectile = (JSONObject) object;
       world.addEntity(new Projectile(projectile,world));
     }
-    //world.updateEntities();
     ambience.play();
     ambience.setLooping(true);
     ambience.setVolume(0.7f);

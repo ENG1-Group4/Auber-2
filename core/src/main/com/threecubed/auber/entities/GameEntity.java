@@ -1,7 +1,7 @@
 package com.threecubed.auber.entities;
 
 import java.util.Dictionary;
-import java.util.Hashtable;
+
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -42,23 +42,6 @@ public abstract class GameEntity {
   public float rotation = 0f;
 
   private float[][] collisionOffsets;
-  //<changed> id stuff added so entities can be relinked on save/load
-  private int id;
-  private static int curId = 0;
-  private static int nextId(){
-    curId ++;
-    return curId -1;
-  }
-  private static Hashtable<Integer,GameEntity> entities = new Hashtable();
-  @Override //so prior equals methods work
-  public boolean equals(Object other){
-    if (other instanceof GameEntity){
-      GameEntity gameEntity = (GameEntity) other;
-      return this.id == gameEntity.id;
-    } else{
-      return false;
-    }
-  }
   /**
    * Initialise a game entity at a given x and y coordinates.
    *
@@ -67,9 +50,6 @@ public abstract class GameEntity {
    * @param sprite The sprite the entity should use
    * */
   public GameEntity(float x, float y, Sprite sprite) {
-    this(x, y, sprite,nextId());
-  }
-  public GameEntity(float x, float y, Sprite sprite,int id) {
     this.sprite = sprite;
     sprite.setOriginCenter();
 
@@ -82,8 +62,6 @@ public abstract class GameEntity {
         {2f, sprite.getHeight() - 2f},
         {sprite.getWidth() - 2f, sprite.getHeight() - 2f}
     };
-    this.id = id;
-    entities.replace(id, this);
   }
   //</changed>
   /**
@@ -221,15 +199,7 @@ public abstract class GameEntity {
     JSONObject gameEntity = new JSONObject();
     gameEntity.put("x",position.x);
     gameEntity.put("y",position.y);
-    gameEntity.put("id",id);
     return gameEntity;
-  }
-  public static GameEntity idCheck(int id){
-    if (entities.keySet().contains(id)){
-      return entities.get(id);
-    } else {
-      throw new IllegalArgumentException("Id not found");
-    }
   }
   /**
    * Creates a player from a given state
@@ -238,7 +208,7 @@ public abstract class GameEntity {
    * @param sprite    the sprite to use
    */
   public GameEntity(JSONObject gameEntity,Sprite sprite){
-    this(gameEntity.getFloat("x"),gameEntity.getFloat("y"),sprite,gameEntity.getInt("id"));
+    this(gameEntity.getFloat("x"),gameEntity.getFloat("y"),sprite);
   }
   //</changed>
 }

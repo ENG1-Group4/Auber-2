@@ -8,9 +8,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
-
+//<changed>
 import org.json.JSONObject;
-
+import java.util.Hashtable;
+//</changed>
 
 /**
  * The infiltrator is the enemy of the game, it will navigate from system to system and sabotage
@@ -23,7 +24,33 @@ import org.json.JSONObject;
 public class Infiltrator extends Npc {
   public boolean exposed = false;
   Sprite unexposedSprite;
-
+  //<changed> adds Id system so infiltrators can be linked to projectiles post saving
+  private int id;
+  private static int curId = 0;
+  private static int nextId(){
+    curId ++;
+    return curId -1;
+  }
+  private static Hashtable<Integer,Infiltrator> entities = new Hashtable();
+  @Override //so prior equals methods work
+  public boolean equals(Object other){
+    if (other instanceof Infiltrator){
+      Infiltrator infiltrator = (Infiltrator) other;
+      return this.id == infiltrator.id;
+    } else{
+      return false;
+    }
+  }
+  public static Infiltrator idCheck(int id){
+    if (entities.keySet().contains(id)){
+      return entities.get(id);
+    } else {
+      throw new IllegalArgumentException("Id not found");
+    }
+  }
+  public Infiltrator(float x, float y, World world) {
+    this(x, y, world,nextId());
+  }
   /**
    * Initialise an infiltrator at given coordinates.
    *
@@ -31,12 +58,13 @@ public class Infiltrator extends Npc {
    * @param y The y position of the infiltrator
    * @param world The game world
    * */
-  public Infiltrator(float x, float y, World world) {
+  public Infiltrator(float x, float y, World world,int id) {
     super(x, y, world);
     navigateToRandomSystem(world);
-
+    this.id = id;
+    entities.replace(id, this);
   }
-
+  //</changed>
   /**
    * Initialise the infiltrator at a random position.
    *
@@ -174,12 +202,16 @@ public class Infiltrator extends Npc {
   public JSONObject toJSON(){
     JSONObject infiltrator = super.toJSON();
     infiltrator.put("exposed",exposed);
+    infiltrator.put("id",id);
     return infiltrator;
   }
   public Infiltrator(JSONObject infiltrator,World world){
     super(infiltrator, world);
     exposed = infiltrator.getBoolean("exposed");
     unexposedSprite = new Sprite(sprite);
+    id = infiltrator.getInt("id");
+    entities.replace(id, this);
+    curId = Math.max(curId,id + 1);
   }
   //</changed>
 }
