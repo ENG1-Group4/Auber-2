@@ -1,5 +1,7 @@
 package com.threecubed.auber.entities;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
@@ -16,6 +18,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.TimeUtils;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 //</changed>
 import com.badlogic.gdx.math.Vector2;
@@ -35,7 +39,7 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
  * @since 1.0
  * */
 public class Player extends GameEntity {
-  public Timer playerTimer = new Timer();
+  private Timer playerTimer = new Timer(); //<changed/> made private
   private Vector2 teleporterRayCoordinates = new Vector2();
 
   /** Health of Auber - varies between 1 and 0. */
@@ -72,6 +76,7 @@ public class Player extends GameEntity {
   @Override
   public void update(World world) {
     if (!world.demoMode) {
+      filterTasks();//<changed/> remove old tasks
       //<changed>check for power-ups
       for (GameEntity entity : world.getEntities()) {
         if (Intersector.overlaps(entity.sprite.getBoundingRectangle(),
@@ -318,15 +323,36 @@ public class Player extends GameEntity {
       }
     }
   }
-  public JSONObject toJSON(){
+  private ArrayList<Task> tasks = new ArrayList();
+  private ArrayList<String> taskEffects = new ArrayList();
+  public void addTask(Task task,float delaySeconds,String effect){
+    tasks.add(playerTimer.scheduleTask(task, delaySeconds));
+    taskEffects.add(effect);
+  }
+  private void filterTasks(){
+    for (int i = tasks.size() - 1; i >= 0; i -= 1) {
+      if (!tasks.get(i).isScheduled()){tasks.remove(i);taskEffects.remove(i);}
+    }
+  }
+  public JSONObject toJSON(World world){
     JSONObject player = super.toJSON();
     player.put("health",health);
     player.put("shield",shield);
+
     player.put("confused",confused);
     player.put("slowed",slowed);
     player.put("blinded",blinded);
     player.put("fast",fast);
     player.put("invinc",invinc);
+    filterTasks();
+    JSONArray jtasks = new JSONArray();
+    for (int i = 0; i < taskEffects.size(); i++) {
+      JSONObject task = new JSONObject();
+      task.put("effect",taskEffects.get(i));
+      task.put("time",tasks.get(i).getExecuteTimeMillis() - TimeUtils.nanosToMillis(TimeUtils.nanoTime()));
+      jtasks.put(task);
+    }
+    player.put("tasks",jtasks);
     return player;
   }
   /**
@@ -344,7 +370,55 @@ public class Player extends GameEntity {
     blinded = player.getBoolean("blinded");
     fast = player.getBoolean("fast");
     invinc = player.getBoolean("invinc");
-    //TODO add scheduling stuff
+    for (Object obj : player.getJSONArray("tasks")) {
+      JSONObject task = (JSONObject) obj;
+      switch (task.getString("effect")) {
+        case "confused":
+        addTask(new Task() {
+          @Override
+          public void run() {
+            confused = false;
+          }
+        }, task.getLong("time")/1000f,"confused");
+          break;
+        case "slowed":
+        addTask(new Task() {
+          @Override
+          public void run() {
+            slowed = false;
+          }
+        }, task.getLong("time")/1000f,"slowed");
+            break;
+        case "blinded":
+        addTask(new Task() {
+          @Override
+          public void run() {
+            blinded = false;
+          }
+        }, task.getLong("time")/1000f,"blinded");
+          break;
+        case "fast":
+        final float speedMult = world.POWERUP_SPEED_MULT;
+        addTask(new Task() {
+          @Override
+          public void run() {
+            maxSpeed /= speedMult;
+            fast = false;
+          }
+        }, task.getLong("time")/1000f,"fast");
+          break;
+        case "invinc":
+        addTask(new Task() {
+          @Override
+          public void run() {
+            invinc = false;
+          }
+        }, task.getLong("time")/1000f,"invinc");
+          break;
+        default:
+          break;
+      }
+    }
   }
   //</changed>
 }

@@ -93,22 +93,23 @@ public class PowerUp extends GameEntity {
     }
     //world.queueEntityRemove(this); removed to handle boom
   }
-  private void shieldPlayer(final World world,int amount){
+  public void shieldPlayer(final World world,int amount){
     world.player.shield += amount;
   }
-  private void healPlayer(final World world,float amount){
+  public void healPlayer(final World world,float amount){
     world.player.health = Math.min(1f, world.player.health + amount);
   }
   private void speedPlayer(final World world) {
+    if (world.player.fast){return;}
     world.player.fast = true;
     world.player.maxSpeed *= world.POWERUP_SPEED_MULT;
-    world.player.playerTimer.scheduleTask(new Task() {
+    world.player.addTask(new Task() {
       @Override
       public void run() {
         world.player.maxSpeed /= world.POWERUP_SPEED_MULT;
         world.player.fast = false;
       }
-    }, World.AUBER_BUFF_TIME);
+    }, World.AUBER_BUFF_TIME,"fast");
   }
   private void boom(final World world) {
     //sprite positioning stuff
@@ -141,12 +142,12 @@ public class PowerUp extends GameEntity {
   }
   private void invincPlayer(final World world) {
     world.player.invinc = true;
-    world.player.playerTimer.scheduleTask(new Task() {
+    world.player.addTask(new Task() {
       @Override
       public void run() {
         world.player.invinc = false;
       }
-    }, World.AUBER_BUFF_TIME);
+    }, World.AUBER_BUFF_TIME,"invinc");
   }
 
   @Override

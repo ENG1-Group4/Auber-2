@@ -1,6 +1,7 @@
 package com.threecubed.auber.screens;
 
 import java.sql.Time;
+import java.util.Date;
 import java.util.logging.FileHandler;
 
 import com.badlogic.gdx.Gdx;
@@ -90,10 +91,9 @@ public class GameScreen extends ScreenAdapter {
     }
     // <changed>
     if (Gdx.input.isKeyPressed(Input.Keys.F5)) {
-      saveGame(java.util.Calendar.getInstance().getTime().toString());
-    }
-    if (Gdx.input.isKeyPressed(Input.Keys.F8)) {
-      ambience.pause();
+      Date time = java.util.Calendar.getInstance().getTime();
+      world.saveTime = time;
+      saveGame(time.toString());
     }
     // </changed>
     // Add any queued entities

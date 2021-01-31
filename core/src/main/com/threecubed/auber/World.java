@@ -25,6 +25,7 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import org.json.*;
 import java.math.BigDecimal;
+import java.util.Date;
 //</changed>
 /**
  * The world class stores information related to what is happening within the game world.
@@ -42,6 +43,8 @@ public class World {
 
   public boolean demoMode = false;
 //<changed>
+  public Date saveTime = null;
+
   private static JSONObject gameData = new JSONObject(Gdx.files.internal("difficulty.json").readString());
   private static JSONObject difficultyData;
   public static void changeDifficulty(String difficulty){
@@ -507,7 +510,7 @@ public class World {
         break;
       }
     }
-    world.put("player",player.toJSON());
+    world.put("player",player.toJSON(this));
     world.put("auberTeleporterCharge",auberTeleporterCharge);
     world.put("infiltratorCount",infiltratorCount);
     world.put("infiltratorsAddedCount",infiltratorsAddedCount);

@@ -94,34 +94,34 @@ public class Projectile extends GameEntity {
   private void confusePlayer(final World world) {
     if (world.player.invinc) {return;}
     world.player.confused = true;
-    world.player.playerTimer.scheduleTask(new Task() {
+    world.player.addTask(new Task() {
       @Override
       public void run() {
         world.player.confused = false;
       }
-    }, World.AUBER_DEBUFF_TIME);
+    }, World.AUBER_DEBUFF_TIME,"confused");
   }
 
   private void slowPlayer(final World world) {
     if (world.player.invinc) {return;}
     world.player.slowed = true;
-    world.player.playerTimer.scheduleTask(new Task() {
+    world.player.addTask(new Task() {
       @Override
       public void run() {
         world.player.slowed = false;
       }
-    }, World.AUBER_DEBUFF_TIME);
+    }, World.AUBER_DEBUFF_TIME,"slow");
   }
 
   private void blindPlayer(final World world) {
     if (world.player.invinc) {return;}
     world.player.blinded = true;
-    world.player.playerTimer.scheduleTask(new Task() {
+    world.player.addTask(new Task() {
       @Override
       public void run() {
         world.player.blinded = false;
       }
-    }, World.AUBER_DEBUFF_TIME - 3f);
+    }, World.AUBER_DEBUFF_TIME - 3f,"blinded");
   }
   //<changed>
   public JSONObject toJSON(){

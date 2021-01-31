@@ -109,6 +109,7 @@ public class LoadScreen extends ScreenAdapter {
     if (fileNames.size() != 0 &&Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE)) {
       saves.remove(fileNames.get(selected_line));
       fileNames.remove(selected_line);
+      if (selected_line == fileNames.size()){selected_line -= 1;}
       Gdx.files.local("saves.json").writeString(saves.toString(), false);
       changed = true;
     }
