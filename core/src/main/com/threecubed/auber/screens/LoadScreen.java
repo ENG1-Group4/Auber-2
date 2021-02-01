@@ -31,7 +31,7 @@ public class LoadScreen extends ScreenAdapter {
   BitmapFont font = new BitmapFont();
   SpriteBatch batch = new SpriteBatch();
   GlyphLayout layout = new GlyphLayout();
-  public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
+  private Music menuMusic;
   private final Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("audio/menuSelect.ogg"));
   Sprite background;
   JSONObject saves;
@@ -45,11 +45,9 @@ public class LoadScreen extends ScreenAdapter {
    * @param game The game object. 
    * @param userWon Whether the user won or lost
    * */
-  public LoadScreen(AuberGame game) {
+  public LoadScreen(AuberGame game, Music menuMusic) {
     this.game = game;
-    menuMusic.play();
-    menuMusic.setVolume(0.1f);
-    menuMusic.setLooping(true);
+    this.menuMusic = menuMusic;
     background = game.atlas.createSprite("stars");
     font.getData().setScale(2);
     saves = new JSONObject(Gdx.files.local("saves.json").readString());

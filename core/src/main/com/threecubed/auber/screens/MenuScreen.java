@@ -129,9 +129,8 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onLoadClick = new Runnable() {
       @Override
       public void run() {
-        menuMusic.stop();
         menuSelect.play(0.2f);
-        game.setScreen(new LoadScreen(game));
+        game.setScreen(new LoadScreen(game,menuMusic));
       }
     };
     loadButton = new Button(
