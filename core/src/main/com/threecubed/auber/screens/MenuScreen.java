@@ -64,10 +64,11 @@ public class MenuScreen extends ScreenAdapter {
     spriteBatch = new SpriteBatch();
 
     //<changed>
-    menuMusic.play();
-    menuMusic.setVolume(0.2f);
-    menuMusic.setLooping(true);
-    quittable = false;
+    if (!menuMusic.isPlaying()){
+      menuMusic.play();
+      menuMusic.setVolume(0.2f);
+      menuMusic.setLooping(true);
+    }
     //</changed>
 
     background = game.atlas.createSprite("stars");

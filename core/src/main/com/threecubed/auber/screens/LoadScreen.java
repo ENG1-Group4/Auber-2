@@ -87,7 +87,6 @@ public class LoadScreen extends ScreenAdapter {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     
     if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-      menuMusic.stop();
       game.setScreen(new MenuScreen(game));
     }
     boolean changed = false;
