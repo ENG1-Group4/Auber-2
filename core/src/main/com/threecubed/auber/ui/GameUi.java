@@ -208,11 +208,11 @@ public class GameUi {
   private void drawSaveIndicator(World world, SpriteBatch screenBatch) {
     if (world.saveTime != null){
       screenBatch.begin();
+      uiFont.setColor(Color.YELLOW);
+      uiFont.draw(screenBatch, "Save Made: " + world.saveTime.toString() + "\n", SAVE_INDICATOR_POS.x,SAVE_INDICATOR_POS.y);
       if (world.saveTime.getTime() + 2000 <= java.util.Calendar.getInstance().getTime().getTime()){
         world.saveTime = null;
       }
-      uiFont.setColor(Color.YELLOW);
-      uiFont.draw(screenBatch, "Save Made: " + world.saveTime.toString() + "\n", SAVE_INDICATOR_POS.x,SAVE_INDICATOR_POS.y);
       screenBatch.end();
     }
   }
