@@ -125,7 +125,7 @@ public class MenuScreen extends ScreenAdapter {
     world.changeDifficulty("normal");
     difficultyButton = new Button(
       new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 65f),
-      1f, game.atlas.createSprite("diffNormalButton"), game, onDifficultyClick);
+      1f, game.atlas.createSprite("diffButton"), game, onDifficultyClick);
 
     Runnable onLoadClick = new Runnable() {
       @Override

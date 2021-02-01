@@ -6,168 +6,175 @@ filter: Nearest,Nearest
 repeat: none
 alienA
   rotate: false
-  xy: 1886, 949
+  xy: 1748, 947
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 alienB
   rotate: false
-  xy: 606, 70
+  xy: 606, 182
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 alienC
   rotate: false
-  xy: 624, 88
+  xy: 624, 200
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 arrow
   rotate: false
-  xy: 606, 86
+  xy: 606, 198
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 arrow2
   rotate: false
-  xy: 1868, 947
+  xy: 1730, 945
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 auber_logo
   rotate: false
-  xy: 866, 320
+  xy: 2, 318
   size: 1000, 643
   orig: 1000, 643
   offset: 0, 0
   index: -1
 demoButton
   rotate: false
-  xy: 866, 116
+  xy: 304, 114
+  size: 300, 100
+  orig: 300, 100
+  offset: 0, 0
+  index: -1
+diffButton
+  rotate: false
+  xy: 2, 114
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
   index: -1
 diffEasyButton
   rotate: false
-  xy: 1168, 116
+  xy: 304, 12
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
   index: -1
 diffHardButton
   rotate: false
-  xy: 304, 2
+  xy: 2, 12
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
   index: -1
 diffNormalButton
   rotate: false
-  xy: 866, 218
+  xy: 304, 216
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
   index: -1
 infiltrator
   rotate: false
-  xy: 1868, 931
+  xy: 1730, 929
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 instructions
   rotate: false
-  xy: 2, 104
-  size: 862, 859
-  orig: 862, 859
+  xy: 1004, 102
+  size: 724, 859
+  orig: 724, 859
   offset: 0, 0
   index: -1
 loadButton
   rotate: false
-  xy: 1168, 218
+  xy: 606, 216
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
   index: -1
 playButton
   rotate: false
-  xy: 2, 2
+  xy: 2, 216
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 1470, 288
+  xy: 908, 286
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 powerUp
   rotate: false
-  xy: 1470, 304
+  xy: 908, 302
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 powerUpBoom
   rotate: false
-  xy: 2026, 2031
+  xy: 2026, 2029
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 powerUpHeal
   rotate: false
-  xy: 1924, 1929
+  xy: 1924, 1927
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 powerUpInvinc
   rotate: false
-  xy: 1924, 1913
+  xy: 1924, 1911
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 powerUpShield
   rotate: false
-  xy: 1940, 1929
+  xy: 1940, 1927
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 powerUpSpeed
   rotate: false
-  xy: 1486, 304
+  xy: 924, 302
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 projectile
   rotate: false
-  xy: 866, 106
+  xy: 2, 2
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 stars
   rotate: false
-  xy: 2, 965
+  xy: 2, 963
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0
   index: -1
 telesplosion
   rotate: false
-  xy: 1924, 1945
+  xy: 1924, 1943
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
