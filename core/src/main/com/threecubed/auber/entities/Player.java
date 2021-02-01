@@ -349,6 +349,7 @@ public class Player extends GameEntity {
     player.put("slowed",slowed);
     player.put("blinded",blinded);
     player.put("fast",fast);
+    player.put("maxSpeed",maxSpeed);
     player.put("invinc",invinc);
     filterTasks();
     JSONArray jtasks = new JSONArray();
@@ -375,6 +376,7 @@ public class Player extends GameEntity {
     slowed = player.getBoolean("slowed");
     blinded = player.getBoolean("blinded");
     fast = player.getBoolean("fast");
+    maxSpeed = player.getFloat("maxSpeed");
     invinc = player.getBoolean("invinc");
     for (Object obj : player.getJSONArray("tasks")) {
       JSONObject task = (JSONObject) obj;
