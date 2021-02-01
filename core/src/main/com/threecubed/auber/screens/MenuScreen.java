@@ -197,13 +197,6 @@ public class MenuScreen extends ScreenAdapter {
     difficultyButton.render(spriteBatch);
     loadButton.render(spriteBatch);
     demoButton.render(spriteBatch);
-
-    //<changed>
-    if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
-      Gdx.app.exit();
-    }
-    //</changed>
-
     spriteBatch.end();
   }
 }
