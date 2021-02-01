@@ -7,11 +7,17 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.World;
 //<changed>
 import org.json.JSONObject;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 //</changed>
 
 public class Projectile extends GameEntity {
   CollisionActions collisionAction;
   GameEntity originEntity;
+
+  //<changed>
+  private Sound playerHurt = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/playerHurt.mp3"));
+  //</changed>
 
   public static enum CollisionActions {
     CONFUSE,
@@ -56,6 +62,9 @@ public class Projectile extends GameEntity {
           && entity != originEntity && entity != this) {
         if (entity instanceof Player) {
           handleCollisionWithPlayer(world);
+          //<changed>
+          playerHurt.play(0.25f);
+          //</changed>
         } 
         world.queueEntityRemove(this);
         return;

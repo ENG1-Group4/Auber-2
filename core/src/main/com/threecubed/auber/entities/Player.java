@@ -34,7 +34,7 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
  * The player entity that the user controls. Handles keyboard input, and interaction with other
  * entities and tiles in the game world.
  *
- * @author Daniel O'Brien, Adam Wiegand
+ * @author Daniel O'Brien, Adam Wiegand, Bogdan Bodnariu-Lescinschi
  * @version 2.0
  * @since 1.0
  * */
@@ -58,8 +58,7 @@ public class Player extends GameEntity {
   
   //<changed>
   private Sound step = Gdx.audio.newSound(Gdx.files.internal("audio/footstep.mp3"));
-  private Sound teleporter = Gdx.audio.newSound(Gdx.files.internal("audio/teleporter.mp3"));
-  private Sound laserCharge = Gdx.audio.newSound(Gdx.files.internal("audio/laserCharge.mp3"));
+  private Sound teleporter = Gdx.audio.newSound(Gdx.files.internal("audio/teleporter.wav"));
   private Sound laserShot = Gdx.audio.newSound(Gdx.files.internal("audio/laserShot.mp3"));
   private long audioStartTimer = 0;
   //</changed>
@@ -92,6 +91,9 @@ public class Player extends GameEntity {
 
       //tp to medbay
       if (Gdx.input.isKeyJustPressed(Input.Keys.Q) || health <= 0) {
+        //<changed>
+        teleporter.play(0.15f);
+        //</changed>
         position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
         confused = false;
         slowed = false;
@@ -132,19 +134,19 @@ public class Player extends GameEntity {
           //Sets the footstep sound effect to play at 0.64 sec intervals when the player is moving with slowed modifier
           velocity.scl(world.PROJECTILE_SLOW_MULT);
           if (TimeUtils.timeSinceNanos(audioStartTimer) > 640000000) {
-            step.play(0.3f);
+            step.play(0.4f);
             audioStartTimer = TimeUtils.nanoTime();
           }
         } else if (fast) {
           //Sets the footstep sound effect to play at 0.20 sec intervals when the player is moving with speed modifier
           if (TimeUtils.timeSinceNanos(audioStartTimer) > 200000000) {
-            step.play(0.3f);
+            step.play(0.4f);
             audioStartTimer = TimeUtils.nanoTime();
           }
         } else {
           //Sets the footstep sound effect to play at 0.32 sec intervals when the player is moving with no modifiers
           if (TimeUtils.timeSinceNanos(audioStartTimer) > 320000000) {
-            step.play(0.3f);
+            step.play(0.4f);
             audioStartTimer = TimeUtils.nanoTime();
           }
         }
@@ -157,7 +159,9 @@ public class Player extends GameEntity {
       } else {
         if (world.auberTeleporterCharge > 0.95f) {
           world.auberTeleporterCharge = 0;
-
+          //<changed>
+          laserShot.play(1f);
+          //</changed>
           // Scare entities
           teleporterRayCoordinates = handleRayCollisions(world);
           for (GameEntity entity : world.getEntities()) {
@@ -207,7 +211,9 @@ public class Player extends GameEntity {
                   linkedTeleporterId
                   );
               velocity.setZero();
-              teleporter.play(0.3f);
+              //<changed>
+              teleporter.play(0.15f);
+              //</changed>
               position.x = linkedTeleporter.getRectangle().getX();
               position.y = linkedTeleporter.getRectangle().getY();
               break;

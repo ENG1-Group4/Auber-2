@@ -65,7 +65,7 @@ public class MenuScreen extends ScreenAdapter {
 
     //<changed>
     menuMusic.play();
-    menuMusic.setVolume(0.1f);
+    menuMusic.setVolume(0.2f);
     menuMusic.setLooping(true);
     quittable = false;
     //</changed>
@@ -82,7 +82,7 @@ public class MenuScreen extends ScreenAdapter {
       public void run() {
         //<changed>
         menuMusic.stop();
-        menuSelect.play(0.2f);
+        menuSelect.play(0.3f);
         //</changed>
         game.setScreen(new GameScreen(game, false));
       }
@@ -91,6 +91,7 @@ public class MenuScreen extends ScreenAdapter {
     playButton = new Button(
         new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 + 50),
         1f, game.atlas.createSprite("playButton"), game, onPlayClick);
+
     //<changed>
     Runnable onDifficultyClick = new Runnable() {
       @Override
@@ -100,14 +101,17 @@ public class MenuScreen extends ScreenAdapter {
           case "normal":
             difficulty = "hard";
             difficultyButton.setSprite(diffHard);
+            menuSelect.play(0.3f);
             break;
           case "hard":
             difficulty = "easy";
             difficultyButton.setSprite(diffEasy);
+            menuSelect.play(0.3f);
             break;
           case "easy":
             difficulty = "normal";
             difficultyButton.setSprite(diffNormal);
+            menuSelect.play(0.3f);
             break;
           default:
             difficulty = "normal";
@@ -134,12 +138,13 @@ public class MenuScreen extends ScreenAdapter {
         new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 180f),
         1f, game.atlas.createSprite("loadButton"), game, onLoadClick);
     //</changed>
+
     Runnable onDemoClick = new Runnable() {
       @Override
       public void run() {
         //<changed>
         menuMusic.stop();
-        menuSelect.play(0.2f);
+        menuSelect.play(0.3f);
         //</changed>
         game.setScreen(new GameScreen(game, true));
       }
@@ -165,6 +170,10 @@ public class MenuScreen extends ScreenAdapter {
     //</changed>
     if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
       game.setScreen(new GameScreen(game, true));
+      //<changed>
+      menuMusic.stop();
+      menuSelect.play(0.3f);
+      //</changed>
     }
     //<changed>
     if (delay > 0){delay -= 1;}
@@ -188,6 +197,12 @@ public class MenuScreen extends ScreenAdapter {
     difficultyButton.render(spriteBatch);
     loadButton.render(spriteBatch);
     demoButton.render(spriteBatch);
+
+    //<changed>
+    if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+      Gdx.app.exit();
+    }
+    //</changed>
 
     spriteBatch.end();
   }
