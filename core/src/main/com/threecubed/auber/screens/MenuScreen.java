@@ -37,6 +37,7 @@ public class MenuScreen extends ScreenAdapter {
   Sprite diffNormal;
   Sprite diffHard;
   int delay = 0;
+  Button loadButton;
   //</changed>
   Button demoButton;
   OrthogonalTiledMapRenderer renderer;
@@ -48,6 +49,7 @@ public class MenuScreen extends ScreenAdapter {
   //<changed>
   public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
   private final Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("audio/menuSelect.ogg"));
+  private Boolean quittable = false;
   //</changed>
   
   /**
@@ -65,6 +67,7 @@ public class MenuScreen extends ScreenAdapter {
     menuMusic.play();
     menuMusic.setVolume(0.2f);
     menuMusic.setLooping(true);
+    quittable = false;
     //</changed>
 
     background = game.atlas.createSprite("stars");
@@ -88,7 +91,7 @@ public class MenuScreen extends ScreenAdapter {
     playButton = new Button(
         new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 + 50),
         1f, game.atlas.createSprite("playButton"), game, onPlayClick);
-    
+
     //<changed>
     Runnable onDifficultyClick = new Runnable() {
       @Override
@@ -115,14 +118,27 @@ public class MenuScreen extends ScreenAdapter {
         }
         delay = 20;
         world.changeDifficulty(difficulty);
+        menuSelect.play(0.2f);
       }
     };
-
+    world.changeDifficulty("normal");
     difficultyButton = new Button(
       new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 65f),
       1f, game.atlas.createSprite("diffNormalButton"), game, onDifficultyClick);
+
+    Runnable onLoadClick = new Runnable() {
+      @Override
+      public void run() {
+        menuMusic.stop();
+        menuSelect.play(0.2f);
+        game.setScreen(new LoadScreen(game));
+      }
+    };
+    loadButton = new Button(
+        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 180f),
+        1f, game.atlas.createSprite("loadButton"), game, onLoadClick);
     //</changed>
-    
+
     Runnable onDemoClick = new Runnable() {
       @Override
       public void run() {
@@ -135,12 +151,23 @@ public class MenuScreen extends ScreenAdapter {
     };
 
     demoButton = new Button(
-        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 180f),
+        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 295f),
         1f, game.atlas.createSprite("demoButton"), game, onDemoClick);
   }
 
   @Override
-  public void render(float delta) {
+  public void render(float deltaTime) {
+    //<changed>
+    if (quittable){
+      if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+        Gdx.app.exit();
+      }
+    } else{
+      if (!Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+        quittable = true;
+      }
+    }
+    //</changed>
     if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
       game.setScreen(new GameScreen(game, true));
       //<changed>
@@ -168,6 +195,7 @@ public class MenuScreen extends ScreenAdapter {
 
     playButton.render(spriteBatch);
     difficultyButton.render(spriteBatch);
+    loadButton.render(spriteBatch);
     demoButton.render(spriteBatch);
 
     //<changed>

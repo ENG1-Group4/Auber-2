@@ -1,5 +1,8 @@
 package com.threecubed.auber.ui;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -58,6 +61,7 @@ public class GameUi {
     drawHealthbar(world, screenBatch);
     drawHealthWarnings(world, screenBatch);
     drawSystemWarnings(world, screenBatch);
+    drawSaveIndicator(world, screenBatch);
   }
 
   /**
@@ -198,5 +202,18 @@ public class GameUi {
     }
     uiFont.setColor(Color.WHITE);
     screenBatch.end();
+  }
+  //<changed>
+  private static final Vector2 SAVE_INDICATOR_POS = new Vector2(1600f, 1050f);
+  private void drawSaveIndicator(World world, SpriteBatch screenBatch) {
+    if (world.saveTime != null){
+      screenBatch.begin();
+      if (world.saveTime.getTime() + 2000 <= java.util.Calendar.getInstance().getTime().getTime()){
+        world.saveTime = null;
+      }
+      uiFont.setColor(Color.YELLOW);
+      uiFont.draw(screenBatch, "Save Made: " + world.saveTime.toString() + "\n", SAVE_INDICATOR_POS.x,SAVE_INDICATOR_POS.y);
+      screenBatch.end();
+    }
   }
 }

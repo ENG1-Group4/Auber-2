@@ -6,10 +6,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.World;
 //<changed>
+import org.json.JSONObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 //</changed>
-
 
 public class Projectile extends GameEntity {
   CollisionActions collisionAction;
@@ -103,33 +103,52 @@ public class Projectile extends GameEntity {
   private void confusePlayer(final World world) {
     if (world.player.invinc) {return;}
     world.player.confused = true;
-    world.player.playerTimer.scheduleTask(new Task() {
+    world.player.addTask(new Task() {
       @Override
       public void run() {
         world.player.confused = false;
       }
-    }, World.AUBER_DEBUFF_TIME);
+    }, World.AUBER_DEBUFF_TIME,"confused");
   }
 
   private void slowPlayer(final World world) {
     if (world.player.invinc) {return;}
     world.player.slowed = true;
-    world.player.playerTimer.scheduleTask(new Task() {
+    world.player.addTask(new Task() {
       @Override
       public void run() {
         world.player.slowed = false;
       }
-    }, World.AUBER_DEBUFF_TIME);
+    }, World.AUBER_DEBUFF_TIME,"slow");
   }
 
   private void blindPlayer(final World world) {
     if (world.player.invinc) {return;}
     world.player.blinded = true;
-    world.player.playerTimer.scheduleTask(new Task() {
+    world.player.addTask(new Task() {
       @Override
       public void run() {
         world.player.blinded = false;
       }
-    }, World.AUBER_DEBUFF_TIME - 3f);
+    }, World.AUBER_DEBUFF_TIME - 3f,"blinded");
   }
+  //<changed>
+  public JSONObject toJSON(){
+    JSONObject projectile = super.toJSON();
+    projectile.put("collisionAction",collisionAction.name());
+    JSONObject velocity = new JSONObject();
+    velocity.put("x",this.velocity.x);
+    velocity.put("y",this.velocity.y);
+    projectile.put("velocity",velocity);
+    projectile.put("originEntity",originEntity.toJSON());
+    return projectile;
+  }
+  public Projectile(JSONObject projectile,World world){
+    super(projectile, world.atlas.createSprite("projectile"));
+    collisionAction = CollisionActions.valueOf(projectile.getString("collisionAction"));
+    JSONObject velocity = projectile.getJSONObject("velocity");
+    this.velocity = new Vector2(velocity.getFloat("x"),velocity.getFloat("y"));
+    originEntity = Infiltrator.idCheck(projectile.getJSONObject("originEntity").getInt("id"));
+  }
+  //</changed>
 }

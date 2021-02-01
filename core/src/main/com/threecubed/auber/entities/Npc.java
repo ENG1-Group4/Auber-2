@@ -9,6 +9,10 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
+//<changed>
+import org.json.JSONArray;
+import org.json.JSONObject;
+//</changed>
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -31,6 +35,7 @@ public abstract class Npc extends GameEntity {
   protected float maxSpeed = 1.3f;
 
   private static String[] textureNames = {"alienA", "alienB", "alienC"};
+  private String textureName;
 
   protected States state = States.IDLE;
 
@@ -59,8 +64,14 @@ public abstract class Npc extends GameEntity {
     maxSpeed *= Utils.randomFloatInRange(rng, World.NPC_SPEED_VARIANCE[0],
         World.NPC_SPEED_VARIANCE[1]);
     this.navigationMesh = navigationMesh;
+    
   }
-
+  //<changed> so sprite can be recorded
+  public Npc(float x, float y, String textureName, World world) {
+    this(x, y, world.atlas.createSprite(textureName) ,world.navigationMesh);
+    this.textureName = textureName;
+  }
+  //</changed>
   /**
    * Initialise an NPC with a random NPC sprite.
    *
@@ -69,11 +80,12 @@ public abstract class Npc extends GameEntity {
    * @param world The game world
    * */
   public Npc(float x, float y, World world) {
+    //<changed> so sprite can be recorded
     this(x, y,
-        world.atlas.createSprite(
           textureNames[Utils.randomIntInRange(world.randomNumberGenerator, 0,
-            textureNames.length - 1)]),
-        world.navigationMesh);
+            textureNames.length - 1)],
+        world);
+    //</changed>
   }
 
   /**
@@ -309,4 +321,34 @@ public abstract class Npc extends GameEntity {
     position.x = location[0];
     position.y = location[1];
   }
+  //<changed>
+  public JSONObject toJSON(){
+    JSONObject npc = super.toJSON();
+    npc.put("maxSpeed",maxSpeed);
+    npc.put("textureName",textureName);
+    npc.put("state",state.name());
+    JSONArray path = new JSONArray();
+    for (Vector2 _vector2 : currentPath) {
+      JSONObject vector2 = new JSONObject();
+      vector2.put("x",_vector2.x);
+      vector2.put("y",_vector2.y);
+      path.put(vector2);
+    }
+    npc.put("currentPath",path);
+    npc.put("aiEnabled",aiEnabled);
+    return npc;
+  }
+  public Npc(JSONObject npc,World world){
+    super(npc, world.atlas.createSprite(npc.getString("textureName")));
+    maxSpeed = npc.getFloat("maxSpeed");
+    state = States.valueOf(npc.getString("state"));
+    for (Object object : npc.getJSONArray("currentPath")) {
+      JSONObject vector2 = (JSONObject) object;
+      currentPath.add(new Vector2(vector2.getFloat("x"),vector2.getFloat("y")));
+    }
+    aiEnabled = npc.getBoolean("aiEnabled");
+    textureName = npc.getString("textureName");
+    this.navigationMesh = world.navigationMesh;
+  }
+  //</changed>
 }

@@ -1,5 +1,9 @@
 package com.threecubed.auber.screens;
 
+import java.sql.Time;
+import java.util.Date;
+import java.util.logging.FileHandler;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
@@ -14,27 +18,33 @@ import com.threecubed.auber.entities.Civilian;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Infiltrator;
 import com.threecubed.auber.entities.Player;
+import com.threecubed.auber.entities.PowerUp;
+import com.threecubed.auber.entities.Projectile;
 import com.threecubed.auber.ui.GameUi;
 //<changed>
 import com.badlogic.gdx.audio.Music;
-//</changed>
+import com.badlogic.gdx.files.FileHandle;
 
+import org.json.*;
+//</changed>
+import org.w3c.dom.NameList;
 
 /**
- * The main screen of the game, responsible for rendering entities and executing their functions.
+ * The main screen of the game, responsible for rendering entities and executing
+ * their functions.
  *
  * @author Daniel O'Brien, Bogdan Bodnariu-Lescinschi
  * @version 1.0
  * @since 1.0
- * */
+ */
 public class GameScreen extends ScreenAdapter {
   public World world;
   public AuberGame game;
   Sprite stars;
-  
-  //<changed>
+
+  // <changed>
   private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
-  //</changed>
+  // </changed>
 
   SpriteBatch screenBatch = new SpriteBatch();
   GameUi ui;
@@ -42,18 +52,19 @@ public class GameScreen extends ScreenAdapter {
   int workingSystems = 0;
 
   /**
-   * Initialise the game screen with the {@link AuberGame} object and add a few entities.
+   * Initialise the game screen with the {@link AuberGame} object and add a few
+   * entities.
    *
-   * @param game The game object
+   * @param game     The game object
    * @param demoMode Whether the game should run in demo mode
-   * */
+   */
   public GameScreen(AuberGame game, boolean demoMode) {
     this.game = game;
     ui = new GameUi(game);
 
     world = new World(game, demoMode);
 
-    //<changed>
+    // <changed>
     ambience.play();
     ambience.setLooping(true);
     ambience.setVolume(0.95f);
@@ -73,12 +84,18 @@ public class GameScreen extends ScreenAdapter {
   @Override
   public void render(float deltaTime) {
     if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-      //<changed>
+      // <changed>
       ambience.stop();
-      //</changed>
+      // </changed>
       game.setScreen(new MenuScreen(game));
     }
-
+    // <changed>
+    if (Gdx.input.isKeyPressed(Input.Keys.F5)) {
+      Date time = java.util.Calendar.getInstance().getTime();
+      world.saveTime = time;
+      saveGame(time.toString());
+    }
+    // </changed>
     // Add any queued entities
     world.updateEntities();
 
@@ -135,4 +152,85 @@ public class GameScreen extends ScreenAdapter {
     world.renderer.dispose();
     ambience.dispose();
   }
+
+  // <changed>
+  /**
+   * Saves the current state of the game to saves.json
+   * entities.
+   *
+   * @param name    the name the file should be saved under
+   */
+  public void saveGame(String name) {
+    JSONObject store = new JSONObject();
+    JSONArray civilians = new JSONArray();
+    JSONArray infiltrators = new JSONArray();
+    JSONArray powerUps = new JSONArray();
+    JSONArray projectiles = new JSONArray();
+    for (GameEntity entity : world.getEntities()) {
+      if (entity instanceof Civilian) {
+        Civilian _civilian = (Civilian) entity;
+        civilians.put(_civilian.toJSON());
+      }
+      if (entity instanceof Infiltrator) {
+        Infiltrator _infiltrator = (Infiltrator) entity;
+        infiltrators.put(_infiltrator.toJSON());
+      }
+      if (entity instanceof PowerUp) {
+        PowerUp _powerUp = (PowerUp) entity;
+        powerUps.put(_powerUp.toJSON());
+      }
+      if (entity instanceof Projectile) {
+        Projectile _projectile = (Projectile) entity;
+        projectiles.put(_projectile.toJSON());
+      }
+    }
+    store.put("civilians", civilians);
+    store.put("infiltrators", infiltrators);
+    store.put("powerUps", powerUps);
+    store.put("projectiles", projectiles);
+    store.put("world", world.toJSON());
+    FileHandle file = Gdx.files.local("saves.json");
+    JSONObject saves = new JSONObject(file.readString());
+    saves.put(name,store);
+    file.writeString(saves.toString(), false);
+  }
+  /**
+   * Creates a game form a given state
+   * 
+   * @param game    The game object
+   * @param name    the name of the file which should be loaded from
+   */
+  public GameScreen(AuberGame game,String name){
+    this.game = game;
+    ui = new GameUi(game);
+    stars = game.atlas.createSprite("stars");
+
+    JSONObject saves = new JSONObject(Gdx.files.local("saves.json").readString());
+    JSONObject store = saves.getJSONObject(name);
+    world = new World(game, store.getJSONObject("world"));
+    JSONArray civilians = store.getJSONArray("civilians");
+    for (Object object : civilians) {
+      JSONObject civilian = (JSONObject) object;
+      world.addEntity(new Civilian(civilian,world));
+    }
+    JSONArray infiltrators = store.getJSONArray("infiltrators");
+    for (Object object : infiltrators) {
+      JSONObject infiltrator = (JSONObject) object;
+      world.addEntity(new Infiltrator(infiltrator,world));
+    }
+    JSONArray powerUps = store.getJSONArray("powerUps");
+    for (Object object : powerUps) {
+      JSONObject powerUp = (JSONObject) object;
+      world.addEntity(new PowerUp(powerUp,world));
+    }
+    JSONArray projectiles = store.getJSONArray("projectiles");
+    for (Object object : projectiles) {
+      JSONObject projectile = (JSONObject) object;
+      world.addEntity(new Projectile(projectile,world));
+    }
+    ambience.play();
+    ambience.setLooping(true);
+    ambience.setVolume(0.7f);
+  }
+  //</changed>
 }

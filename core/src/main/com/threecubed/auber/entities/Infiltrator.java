@@ -9,10 +9,11 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 //<changed>
+import org.json.JSONObject;
+import java.util.Hashtable;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 //</changed>
-
 
 /**
  * The infiltrator is the enemy of the game, it will navigate from system to system and sabotage
@@ -25,12 +26,38 @@ import com.badlogic.gdx.audio.Sound;
 public class Infiltrator extends Npc {
   public boolean exposed = false;
   Sprite unexposedSprite;
-  //<changed>
+  //<changed> adds Id system so infiltrators can be linked to projectiles post saving
+  private int id;
+  private static int curId = 0;
+  private static int nextId(){
+    curId ++;
+    return curId -1;
+  }
+  private static Hashtable<Integer,Infiltrator> entities = new Hashtable();
+  @Override //so prior equals methods work
+  public boolean equals(Object other){
+    if (other instanceof Infiltrator){
+      Infiltrator infiltrator = (Infiltrator) other;
+      return this.id == infiltrator.id;
+    } else{
+      return false;
+    }
+  }
+  public static Infiltrator idCheck(int id){
+    if (entities.keySet().contains(id)){
+      return entities.get(id);
+    } else {
+      throw new IllegalArgumentException("Id not found");
+    }
+  }
+  public Infiltrator(float x, float y, World world) {
+    this(x, y, world,nextId());
+  }
+
   private Sound infiltratorHurt = Gdx.audio.newSound(Gdx.files.internal("audio/infiltratorHurt.mp3"));
   private Sound systemError = Gdx.audio.newSound(Gdx.files.internal("audio/systemError.wav"));
   private Sound systemDestroyed = Gdx.audio.newSound(Gdx.files.internal("audio/systemDestroyed.wav"));
   //</changed>
-
   /**
    * Initialise an infiltrator at given coordinates.
    *
@@ -38,12 +65,13 @@ public class Infiltrator extends Npc {
    * @param y The y position of the infiltrator
    * @param world The game world
    * */
-  public Infiltrator(float x, float y, World world) {
+  public Infiltrator(float x, float y, World world,int id) {
     super(x, y, world);
     navigateToRandomSystem(world);
-
+    this.id = id;
+    entities.replace(id, this);
   }
-
+  //</changed>
   /**
    * Initialise the infiltrator at a random position.
    *
@@ -87,6 +115,7 @@ public class Infiltrator extends Npc {
   @Override
   public void handleTeleporterShot(final World world) {
     //<changed>
+    if (!aiEnabled) {return;}
     infiltratorHurt.play(0.25f);
     //</changed>
     if (state == States.ATTACKING_SYSTEM) {
@@ -184,5 +213,21 @@ public class Infiltrator extends Npc {
     Projectile projectile = new Projectile(getCenterX(), getCenterY(), projectileVelocity, this,
         Projectile.CollisionActions.randomAction(), world);
     world.queueEntityAdd(projectile);
-  } 
+  }
+  //<changed>
+  public JSONObject toJSON(){
+    JSONObject infiltrator = super.toJSON();
+    infiltrator.put("exposed",exposed);
+    infiltrator.put("id",id);
+    return infiltrator;
+  }
+  public Infiltrator(JSONObject infiltrator,World world){
+    super(infiltrator, world);
+    exposed = infiltrator.getBoolean("exposed");
+    unexposedSprite = new Sprite(sprite);
+    id = infiltrator.getInt("id");
+    entities.replace(id, this);
+    curId = Math.max(curId,id + 1);
+  }
+  //</changed>
 }

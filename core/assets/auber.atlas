@@ -6,21 +6,21 @@ filter: Nearest,Nearest
 repeat: none
 alienA
   rotate: false
-  xy: 1868, 931
+  xy: 1886, 949
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 alienB
   rotate: false
-  xy: 1886, 949
+  xy: 606, 70
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 alienC
   rotate: false
-  xy: 606, 70
+  xy: 624, 88
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -55,7 +55,7 @@ demoButton
   index: -1
 diffEasyButton
   rotate: false
-  xy: 1168, 218
+  xy: 1168, 116
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
@@ -76,7 +76,7 @@ diffNormalButton
   index: -1
 infiltrator
   rotate: false
-  xy: 2026, 2031
+  xy: 1868, 931
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -88,6 +88,13 @@ instructions
   orig: 862, 859
   offset: 0, 0
   index: -1
+loadButton
+  rotate: false
+  xy: 1168, 218
+  size: 300, 100
+  orig: 300, 100
+  offset: 0, 0
+  index: -1
 playButton
   rotate: false
   xy: 2, 2
@@ -97,49 +104,49 @@ playButton
   index: -1
 player
   rotate: false
-  xy: 624, 88
+  xy: 1470, 288
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 powerUp
   rotate: false
-  xy: 1168, 202
+  xy: 1470, 304
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 powerUpBoom
   rotate: false
-  xy: 1924, 1929
+  xy: 2026, 2031
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 powerUpHeal
   rotate: false
-  xy: 1470, 304
+  xy: 1924, 1929
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 powerUpInvinc
   rotate: false
-  xy: 1184, 202
+  xy: 1924, 1913
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 powerUpShield
   rotate: false
-  xy: 1470, 288
+  xy: 1940, 1929
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 powerUpSpeed
   rotate: false
-  xy: 1168, 186
+  xy: 1486, 304
   size: 14, 14
   orig: 14, 14
   offset: 0, 0

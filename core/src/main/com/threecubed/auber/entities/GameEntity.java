@@ -1,5 +1,8 @@
 package com.threecubed.auber.entities;
 
+import java.util.Dictionary;
+
+
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,7 +16,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.World;
-
+//<changed>
+import org.json.JSONObject;
+//</changed>
 
 /**
  * The GameEntity class is the abstract class from which all entities, including the player must
@@ -37,7 +42,6 @@ public abstract class GameEntity {
   public float rotation = 0f;
 
   private float[][] collisionOffsets;
-
   /**
    * Initialise a game entity at a given x and y coordinates.
    *
@@ -46,7 +50,7 @@ public abstract class GameEntity {
    * @param sprite The sprite the entity should use
    * */
   public GameEntity(float x, float y, Sprite sprite) {
-    this.sprite = sprite; 
+    this.sprite = sprite;
     sprite.setOriginCenter();
 
     position = new Vector2(x, y);
@@ -57,9 +61,9 @@ public abstract class GameEntity {
         {sprite.getWidth() - 2f, 2f},
         {2f, sprite.getHeight() - 2f},
         {sprite.getWidth() - 2f, sprite.getHeight() - 2f}
-      };
+    };
   }
-
+  //</changed>
   /**
    * Render the entity at its current coordinates with its current rotation.
    *
@@ -190,4 +194,21 @@ public abstract class GameEntity {
   public Vector2 getCenter() {
     return new Vector2(getCenterX(), getCenterY());
   }
+  //<changed>
+  public JSONObject toJSON(){
+    JSONObject gameEntity = new JSONObject();
+    gameEntity.put("x",position.x);
+    gameEntity.put("y",position.y);
+    return gameEntity;
+  }
+  /**
+   * Creates a player from a given state
+   * 
+   * @param gameEntity   the JSONObject of the gameEntity
+   * @param sprite    the sprite to use
+   */
+  public GameEntity(JSONObject gameEntity,Sprite sprite){
+    this(gameEntity.getFloat("x"),gameEntity.getFloat("y"),sprite);
+  }
+  //</changed>
 }

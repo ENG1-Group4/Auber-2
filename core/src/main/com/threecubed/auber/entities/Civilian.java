@@ -3,6 +3,8 @@ package com.threecubed.auber.entities;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 
+import org.json.JSONObject;
+
 
 /**
  * The Civilian is the passive entity in auber that allows for {@link Infiltrator}s to blend in.
@@ -40,4 +42,9 @@ public class Civilian extends Npc {
 
   @Override
   public void handleTeleporterShot(World world) {  }
+  //<changed>
+  public Civilian(JSONObject npc,World world){
+    super(npc, world);
+  }
+  //</changed>
 }
