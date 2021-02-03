@@ -27,6 +27,8 @@
             <p><a href="https://drive.google.com/file/d/1TeTnuYcloA17wot_ERS1VvWJNfTBTeg1/view?usp=sharing">6. Implementation</a></p>
             <p><a href="https://drive.google.com/file/d/1CoxiBXMJBZhhFLvYLqODq_kQNVLN9Uu-/view?usp=sharing">8. Self-Assessment Table</a></p>
             <h3 id="builds">Builds</h3>
+
+            <h4>Assessment 1 Builds</h4>
             <p><a href="https://drive.google.com/file/d/1f8fNV8tfYLLfs8FM5eZCUB1xhqkU53xf/view?usp=sharing">Build 1 [~05/11/2020]</a></p>
             <p><a href="https://drive.google.com/file/d/1A2wBVNAJdFb2qewvv9756J4JB5l5sBXl/view?usp=sharing">Build 2 [~09/11/2020]</a></p>
             <p><a href="https://drive.google.com/file/d/1iFtnTSMXIB1KpJzP44aypBQOD58iqgis/view?usp=sharing">Build 3 [~13/10/2020]</a></p>
@@ -38,6 +40,10 @@
             <p><a href="https://drive.google.com/file/d/1Tz0rxqM8xz5jIVdVNi4czY7Xiu7SDz0z/view?usp=sharing">Release Candidate 2</a></p>
             <p><a href="https://drive.google.com/file/d/1AwTYnpywa2FFz3QveA4Ero6NBj5BisYl/view?usp=sharing">Final Build (Non-scalable)</a></p>
             <p><a href="https://drive.google.com/file/d/1PKoO4WhdRMGs0WT90f3bEN7uzdTnUX2l/view?usp=sharing">Final Build (Scalable on Linux)</a></p>
+
+            <h4>Assessment 2 Build</h4>
+            <div id="assess_2_build"></div>
+
             <h3 id="assessment-documents">Assessment Documents</h3>
             <p><a href="pdfs/auberbrief.pdf">Auber Brief</a></p>
             <p><a href="pdfs/assessmentbrief.pdf">Assessment Brief</a></p>
@@ -47,6 +53,49 @@
             <p><a href="https://github.com/ENG1-Group4/Auber-2" target="_blank">The GitHub repository can be found here</a></p>
         </div>
         <script>
+            var request = new XMLHttpRequest();
+            request.open('GET', 'https://api.github.com/repos/ENG1-Group4/Auber-2/releases', true);
+            const buildsList = document.getElementById('assess_2_build')
+
+            request.onload = function() {
+                if (this.status >= 200 && this.status < 400) {
+                    // Success!
+                    var data = JSON.parse(this.response);
+
+
+                    for(var i=data.length-1; i>=0; i--){
+                        console.log(i)
+                        const build = data[i];
+                        const dateObj = new Date(build.published_at);
+
+                        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                        const day = String(dateObj.getDate()).padStart(2, '0');
+                        const year = dateObj.getFullYear();
+                        const hour = String(dateObj.getHours()).padStart(2,'0');
+                        const mins = String(dateObj.getMinutes()).padStart(2,'0');
+                        const dateOutput =  day + '/'+ month  + '/' + year + ' ' + hour + ':' + mins;
+
+                        buildsList.innerHTML += '<p><a href="'+build.html_url+'">Build '+build.name+' ['+dateOutput+']</a></p>'
+                    }
+
+                } else {
+                    // We reached our target server, but it returned an error
+                    buildsList.innerHTML = '<p>There was an error download individual builds, please see the full list ' +
+                        'on github at <a href="https://github.com/ENG1-Group4/Auber-2/releases">' +
+                        'https://github.com/ENG1-Group4/Auber-2/releases</a></p>'
+                }
+            };
+
+            request.onerror = function() {
+                // There was a connection error of some sort
+                buildsList.innerHTML = '<p>There was an error download individual builds, please see the full list ' +
+                    'on github at <a href="https://github.com/ENG1-Group4/Auber-2/releases">' +
+                    'https://github.com/ENG1-Group4/Auber-2/releases</a></p>'
+            };
+
+            request.send();
+
+
             const contentsBox = document.getElementById('contents-box')
             const headers = document.querySelectorAll('h3, h4, h5, h6')
 
