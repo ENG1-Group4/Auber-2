@@ -1,0 +1,353 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PowerUp</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.threecubed.auber.entities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PowerUp (com.threecubed.auber.entities)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PowerUp</td>
+<td class="coverageStat">
+  <span class="percent">
+    72.7%
+  </span>
+  <span class="absValue">
+    (8/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76.6%
+  </span>
+  <span class="absValue">
+    (59/ 77)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PowerUp$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/ 4)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">PowerUp$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/ 3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">PowerUp$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">PowerUp$PowerUpEffect</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/ 8)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    68.4%
+  </span>
+  <span class="absValue">
+    (13/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    74.2%
+  </span>
+  <span class="absValue">
+    (69/ 93)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.threecubed.auber.entities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.utils.Timer.Task;
+<i>4</i>&nbsp;import com.threecubed.auber.World;
+<i>5</i>&nbsp;import com.threecubed.auber.pathfinding.NavigationMesh;
+<i>6</i>&nbsp;//&lt;changed&gt;
+<i>7</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>8</i>&nbsp;import com.badlogic.gdx.audio.Sound;
+<i>9</i>&nbsp;//&lt;/changed&gt;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import org.json.JSONObject;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;/**
+<i>14</i>&nbsp; * The Power up which can be picked up by the player.
+<i>15</i>&nbsp; *
+<i>16</i>&nbsp; * @author Adam Wiegand, Bogdan Bodnariu-Lescinschi
+<i>17</i>&nbsp; * @version 0.0
+<i>18</i>&nbsp; * @since 2.0
+<i>19</i>&nbsp; * */
+<i>20</i>&nbsp;public class PowerUp extends GameEntity {
+<i>21</i>&nbsp;  PowerUpEffect powerUpEffect;
+<i>22</i>&nbsp;
+<b class="fc"><i>23</i>&nbsp;  private Sound powerupPing = Gdx.audio.newSound(Gdx.files.internal(&quot;audio/powerupPing.mp3&quot;));</b>
+<b class="fc"><i>24</i>&nbsp;  private Sound powerupBoom = Gdx.audio.newSound(Gdx.files.internal(&quot;audio/powerupBoom.wav&quot;));</b>
+<i>25</i>&nbsp;
+<b class="fc"><i>26</i>&nbsp;  public static enum PowerUpEffect {</b>
+<b class="fc"><i>27</i>&nbsp;    SHIELD,</b>
+<b class="fc"><i>28</i>&nbsp;    HEAL,</b>
+<b class="fc"><i>29</i>&nbsp;    SPEED,</b>
+<b class="fc"><i>30</i>&nbsp;    BOOM,</b>
+<b class="fc"><i>31</i>&nbsp;    INVINC,</b>
+<b class="fc"><i>32</i>&nbsp;    DUD;//for it to do nothing</b>
+<i>33</i>&nbsp;  
+<i>34</i>&nbsp;    public static PowerUpEffect randomEffect() {
+<i>35</i>&nbsp;      // Int rounds down so no need to sub 1 from length
+<b class="nc"><i>36</i>&nbsp;        return values()[(int) (Math.random() * (values().length - 1))];</b>
+<i>37</i>&nbsp;      }
+<i>38</i>&nbsp;    }
+<b class="fc"><i>39</i>&nbsp;  private int boomDelay = 0;</b>
+<i>40</i>&nbsp;  /**
+<i>41</i>&nbsp;   * Initialise a PowerUp.
+<i>42</i>&nbsp;   *
+<i>43</i>&nbsp;   * @param x The x coordinate to initialise at
+<i>44</i>&nbsp;   * @param y The y coordinate to initialise at
+<i>45</i>&nbsp;   * @param effect The effect the powerUp should have on the player
+<i>46</i>&nbsp;   * @param world The game world
+<i>47</i>&nbsp;   * */
+<i>48</i>&nbsp;  public PowerUp(float x, float y, PowerUpEffect effect, World world) { 
+<b class="fc"><i>49</i>&nbsp;    super(x, y, world.atlas.createSprite(spriteName(effect)));</b>
+<b class="fc"><i>50</i>&nbsp;    powerUpEffect = effect;</b>
+<b class="fc"><i>51</i>&nbsp;  }</b>
+<i>52</i>&nbsp;  /**
+<i>53</i>&nbsp;   * the name of that powerUp&#39;s sprite.
+<i>54</i>&nbsp;   * 
+<i>55</i>&nbsp;   * @param effect The effect the powerUp should have on the player
+<i>56</i>&nbsp;   * */
+<i>57</i>&nbsp;  private static String spriteName(PowerUpEffect effect){
+<b class="fc"><i>58</i>&nbsp;    switch (effect) {</b>
+<i>59</i>&nbsp;      case SHIELD:
+<b class="fc"><i>60</i>&nbsp;        return &quot;powerUpShield&quot;;</b>
+<i>61</i>&nbsp;      case HEAL:
+<b class="fc"><i>62</i>&nbsp;        return &quot;powerUpHeal&quot;;</b>
+<i>63</i>&nbsp;      case SPEED:
+<b class="fc"><i>64</i>&nbsp;        return &quot;powerUpSpeed&quot;;</b>
+<i>65</i>&nbsp;      case BOOM:
+<b class="fc"><i>66</i>&nbsp;        return &quot;powerUpBoom&quot;;</b>
+<i>67</i>&nbsp;      case INVINC:
+<b class="fc"><i>68</i>&nbsp;        return &quot;powerUpInvinc&quot;;</b>
+<i>69</i>&nbsp;      default:
+<b class="fc"><i>70</i>&nbsp;        return &quot;powerUp&quot;;</b>
+<i>71</i>&nbsp;      }
+<i>72</i>&nbsp;  }
+<i>73</i>&nbsp;  /**
+<i>74</i>&nbsp;   * apply this power-up to the player
+<i>75</i>&nbsp;   * 
+<i>76</i>&nbsp;   * @param world The world in which the player exists
+<i>77</i>&nbsp;   * */
+<i>78</i>&nbsp;  public void handleCollisionWithPlayer(World world) {
+<b class="fc"><i>79</i>&nbsp;    switch (powerUpEffect) {</b>
+<i>80</i>&nbsp;      case SHIELD:
+<b class="fc"><i>81</i>&nbsp;        shieldPlayer(world,world.POWERUP_SHIELD_AMOUNT);</b>
+<b class="fc"><i>82</i>&nbsp;        powerupPing.play(0.3f);</b>
+<b class="fc"><i>83</i>&nbsp;        world.queueEntityRemove(this);</b>
+<b class="fc"><i>84</i>&nbsp;        break;</b>
+<i>85</i>&nbsp;      case HEAL:
+<b class="fc"><i>86</i>&nbsp;        healPlayer(world,World.POWERUP_HEALTH_AMOUNT);</b>
+<b class="fc"><i>87</i>&nbsp;        powerupPing.play(0.3f);</b>
+<b class="fc"><i>88</i>&nbsp;        world.queueEntityRemove(this);</b>
+<b class="fc"><i>89</i>&nbsp;        break;</b>
+<i>90</i>&nbsp;      case SPEED:
+<b class="fc"><i>91</i>&nbsp;        speedPlayer(world);</b>
+<b class="fc"><i>92</i>&nbsp;        powerupPing.play(0.3f);</b>
+<b class="fc"><i>93</i>&nbsp;        world.queueEntityRemove(this);</b>
+<b class="fc"><i>94</i>&nbsp;        break;</b>
+<i>95</i>&nbsp;      case INVINC:
+<b class="fc"><i>96</i>&nbsp;        invincPlayer(world);</b>
+<b class="fc"><i>97</i>&nbsp;        powerupPing.play(0.3f);</b>
+<b class="fc"><i>98</i>&nbsp;        world.queueEntityRemove(this);</b>
+<b class="fc"><i>99</i>&nbsp;        break;</b>
+<i>100</i>&nbsp;      case BOOM:
+<b class="fc"><i>101</i>&nbsp;        boom(world);</b>
+<b class="fc"><i>102</i>&nbsp;        powerupBoom.play(0.9f);</b>
+<b class="fc"><i>103</i>&nbsp;        break;</b>
+<i>104</i>&nbsp;      default:
+<i>105</i>&nbsp;        break;
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;    //world.queueEntityRemove(this); removed to handle boom
+<b class="fc"><i>108</i>&nbsp;  }</b>
+<i>109</i>&nbsp;  public void shieldPlayer(final World world,int amount){
+<b class="fc"><i>110</i>&nbsp;    world.player.shield += amount;</b>
+<b class="fc"><i>111</i>&nbsp;  }</b>
+<i>112</i>&nbsp;  public void healPlayer(final World world,float amount){
+<b class="fc"><i>113</i>&nbsp;    world.player.health = Math.min(1f, world.player.health + amount);</b>
+<b class="fc"><i>114</i>&nbsp;  }</b>
+<i>115</i>&nbsp;  private void speedPlayer(final World world) {
+<b class="fc"><i>116</i>&nbsp;    if (world.player.fast){return;}</b>
+<b class="fc"><i>117</i>&nbsp;    world.player.fast = true;</b>
+<b class="fc"><i>118</i>&nbsp;    world.player.maxSpeed *= world.POWERUP_SPEED_MULT;</b>
+<b class="fc"><i>119</i>&nbsp;    world.player.addTask(new Task() {</b>
+<i>120</i>&nbsp;      @Override
+<i>121</i>&nbsp;      public void run() {
+<b class="nc"><i>122</i>&nbsp;        world.player.maxSpeed /= world.POWERUP_SPEED_MULT;</b>
+<b class="nc"><i>123</i>&nbsp;        world.player.fast = false;</b>
+<b class="nc"><i>124</i>&nbsp;      }</b>
+<i>125</i>&nbsp;    }, World.AUBER_BUFF_TIME,&quot;fast&quot;);
+<b class="fc"><i>126</i>&nbsp;  }</b>
+<i>127</i>&nbsp;  private void boom(final World world) {
+<i>128</i>&nbsp;    //sprite positioning stuff
+<b class="fc"><i>129</i>&nbsp;    position.x += sprite.getWidth()/2;</b>
+<b class="fc"><i>130</i>&nbsp;    position.y += sprite.getHeight()/2;</b>
+<b class="fc"><i>131</i>&nbsp;    sprite = world.atlas.createSprite(&quot;telesplosion&quot;);</b>
+<b class="fc"><i>132</i>&nbsp;    sprite.setScale(World.POWERUP_BOOM_RANGE/sprite.getWidth());//scaleable telesplosion</b>
+<b class="fc"><i>133</i>&nbsp;    position.x -= sprite.getWidth()/2;</b>
+<b class="fc"><i>134</i>&nbsp;    position.y -= sprite.getHeight()/2;</b>
+<b class="fc"><i>135</i>&nbsp;    boomDelay = 6;</b>
+<b class="fc"><i>136</i>&nbsp;    powerUpEffect = PowerUpEffect.DUD;//so no benefit is gained</b>
+<b class="fc"><i>137</i>&nbsp;    for (GameEntity entity : world.getEntities()) {</b>
+<b class="fc"><i>138</i>&nbsp;      float entityDistance = NavigationMesh.getEuclidianDistance(</b>
+<i>139</i>&nbsp;        new float[] {position.x, position.y},
+<i>140</i>&nbsp;        new float[] {entity.position.x, entity.position.y}
+<i>141</i>&nbsp;        );
+<b class="fc"><i>142</i>&nbsp;      if (entityDistance &lt; World.POWERUP_BOOM_RANGE + World.NPC_EAR_STRENGTH &amp;&amp; entity instanceof Npc) {</b>
+<b class="nc"><i>143</i>&nbsp;        Npc npc = (Npc) entity;</b>
+<b class="nc"><i>144</i>&nbsp;        if (entityDistance &lt; World.POWERUP_BOOM_RANGE){</b>
+<b class="nc"><i>145</i>&nbsp;          npc.handleTeleporterShot(world);</b>
+<i>146</i>&nbsp;        }
+<b class="nc"><i>147</i>&nbsp;        if (entity instanceof Infiltrator) {</b>
+<b class="nc"><i>148</i>&nbsp;          Infiltrator infiltrator = (Infiltrator) entity;</b>
+<i>149</i>&nbsp;          // Exposed infiltrators shouldn&#39;t flee
+<b class="nc"><i>150</i>&nbsp;          if (infiltrator.exposed) {continue;}</b>
+<i>151</i>&nbsp;        }
+<b class="nc"><i>152</i>&nbsp;        npc.navigateToNearestFleepoint(world);</b>
+<i>153</i>&nbsp;      }
+<b class="fc"><i>154</i>&nbsp;    }</b>
+<b class="fc"><i>155</i>&nbsp;  }</b>
+<i>156</i>&nbsp;  private void invincPlayer(final World world) {
+<b class="fc"><i>157</i>&nbsp;    world.player.invinc = true;</b>
+<b class="fc"><i>158</i>&nbsp;    world.player.addTask(new Task() {</b>
+<i>159</i>&nbsp;      @Override
+<i>160</i>&nbsp;      public void run() {
+<b class="nc"><i>161</i>&nbsp;        world.player.invinc = false;</b>
+<b class="nc"><i>162</i>&nbsp;      }</b>
+<i>163</i>&nbsp;    }, World.AUBER_BUFF_TIME,&quot;invinc&quot;);
+<b class="fc"><i>164</i>&nbsp;  }</b>
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;  @Override
+<i>167</i>&nbsp;  public void update(World world) {
+<i>168</i>&nbsp;
+<b class="nc"><i>169</i>&nbsp;    if (boomDelay &gt;= 1){</b>
+<b class="nc"><i>170</i>&nbsp;      boomDelay--;</b>
+<b class="nc"><i>171</i>&nbsp;      if (boomDelay == 0){</b>
+<b class="nc"><i>172</i>&nbsp;        world.queueEntityRemove(this);</b>
+<i>173</i>&nbsp;      }
+<i>174</i>&nbsp;    }
+<b class="nc"><i>175</i>&nbsp;  }</b>
+<i>176</i>&nbsp;  //&lt;changed&gt;
+<i>177</i>&nbsp;  public JSONObject toJSON(){
+<b class="nc"><i>178</i>&nbsp;    JSONObject powerUp = super.toJSON();</b>
+<b class="nc"><i>179</i>&nbsp;    powerUp.put(&quot;powerUpEffect&quot;,powerUpEffect.name());</b>
+<b class="nc"><i>180</i>&nbsp;    return powerUp;</b>
+<i>181</i>&nbsp;  }
+<i>182</i>&nbsp;  public PowerUp(JSONObject powerUp,World world){
+<b class="nc"><i>183</i>&nbsp;    super(powerUp, world.atlas.createSprite(spriteName(PowerUpEffect.valueOf(powerUp.getString(&quot;powerUpEffect&quot;)))));</b>
+<b class="nc"><i>184</i>&nbsp;    powerUpEffect = PowerUpEffect.valueOf(powerUp.getString(&quot;powerUpEffect&quot;));</b>
+<b class="nc"><i>185</i>&nbsp;  }</b>
+<i>186</i>&nbsp;  //&lt;/changed&gt;
+<i>187</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-02-09 15:24</div>
+</div>
+</body>
+</html>

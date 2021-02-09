@@ -1,0 +1,766 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: World</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.threecubed.auber</a> ]
+</div>
+
+<h1>Coverage Summary for Class: World (com.threecubed.auber)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">World</td>
+<td class="coverageStat">
+  <span class="percent">
+    23.5%
+  </span>
+  <span class="absValue">
+    (4/ 17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    15.2%
+  </span>
+  <span class="absValue">
+    (38/ 250)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">World$$EnhancerByMockitoWithCGLIB$$71bb8034</td>
+  </tr>
+  <tr>
+    <td class="name">World$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">World$SystemStates</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">World$Tiles</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 20)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (4/ 24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    13.8%
+  </span>
+  <span class="absValue">
+    (38/ 276)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.threecubed.auber;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.graphics.Color;
+<i>4</i>&nbsp;import com.badlogic.gdx.graphics.OrthographicCamera;
+<i>5</i>&nbsp;import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+<i>6</i>&nbsp;import com.badlogic.gdx.maps.MapObject;
+<i>7</i>&nbsp;import com.badlogic.gdx.maps.MapObjects;
+<i>8</i>&nbsp;import com.badlogic.gdx.maps.objects.RectangleMapObject;
+<i>9</i>&nbsp;import com.badlogic.gdx.maps.tiled.TiledMap;
+<i>10</i>&nbsp;import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+<i>11</i>&nbsp;import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+<i>12</i>&nbsp;import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
+<i>13</i>&nbsp;import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+<i>14</i>&nbsp;import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+<i>15</i>&nbsp;import com.badlogic.gdx.math.Vector2;//&lt;changed/&gt;
+<i>16</i>&nbsp;import com.threecubed.auber.entities.GameEntity;
+<i>17</i>&nbsp;import com.threecubed.auber.entities.Player;
+<i>18</i>&nbsp;import com.threecubed.auber.pathfinding.NavigationMesh;
+<i>19</i>&nbsp;import com.threecubed.auber.screens.GameOverScreen;
+<i>20</i>&nbsp;import com.threecubed.auber.screens.GameScreen;
+<i>21</i>&nbsp;import java.util.ArrayList;
+<i>22</i>&nbsp;import java.util.List;
+<i>23</i>&nbsp;import java.util.Random;
+<i>24</i>&nbsp;//&lt;changed&gt;
+<i>25</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>26</i>&nbsp;import org.json.*;
+<i>27</i>&nbsp;import java.math.BigDecimal;
+<i>28</i>&nbsp;import java.util.Date;
+<i>29</i>&nbsp;//&lt;/changed&gt;
+<i>30</i>&nbsp;/**
+<i>31</i>&nbsp; * The world class stores information related to what is happening within the game world.
+<i>32</i>&nbsp; * It should only be used within the GameScreen screen.
+<i>33</i>&nbsp; *
+<i>34</i>&nbsp; * @author Daniel O&#39;Brien, Adam Wiegand
+<i>35</i>&nbsp; * @version 1.0
+<i>36</i>&nbsp; * @since 1.0
+<i>37</i>&nbsp; * */
+<i>38</i>&nbsp;public class World {
+<i>39</i>&nbsp;  public AuberGame game;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  public Player player;
+<i>42</i>&nbsp;  public int infiltratorCount;
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;  public boolean demoMode = false;</b>
+<i>45</i>&nbsp;//&lt;changed&gt;
+<b class="nc"><i>46</i>&nbsp;  public Date saveTime = null;</b>
+<i>47</i>&nbsp;
+<b class="fc"><i>48</i>&nbsp;  private static JSONObject gameData = new JSONObject(Gdx.files.internal(&quot;difficulty.json&quot;).readString());</b>
+<i>49</i>&nbsp;  private static JSONObject difficultyData;
+<i>50</i>&nbsp;  public static void changeDifficulty(String difficulty){
+<b class="fc"><i>51</i>&nbsp;    difficultyData = (JSONObject) gameData.get(difficulty);</b>
+<b class="fc"><i>52</i>&nbsp;    setValues();</b>
+<b class="fc"><i>53</i>&nbsp;  }</b>
+<i>54</i>&nbsp;  private static float getFloat(JSONObject obj,String key){
+<b class="fc"><i>55</i>&nbsp;    return BigDecimal.valueOf(obj.getDouble(key)).floatValue();</b>
+<i>56</i>&nbsp;  }
+<i>57</i>&nbsp;  private static void setValues(){
+<b class="fc"><i>58</i>&nbsp;    AUBER_CHARGE_RATE = getFloat(difficultyData,&quot;AUBER_CHARGE_RATE&quot;);</b>
+<b class="fc"><i>59</i>&nbsp;    AUBER_DEBUFF_TIME = getFloat(difficultyData,&quot;AUBER_DEBUFF_TIME&quot;);</b>
+<b class="fc"><i>60</i>&nbsp;    AUBER_BUFF_TIME = getFloat(difficultyData,&quot;AUBER_BUFF_TIME&quot;);</b>
+<b class="fc"><i>61</i>&nbsp;    AUBER_HEAL_RATE = getFloat(difficultyData,&quot;AUBER_HEAL_RATE&quot;);</b>
+<b class="fc"><i>62</i>&nbsp;    SYSTEM_BREAK_TIME = getFloat(difficultyData,&quot;SYSTEM_BREAK_TIME&quot;);</b>
+<b class="fc"><i>63</i>&nbsp;    SYSTEM_SABOTAGE_CHANCE = getFloat(difficultyData,&quot;SYSTEM_SABOTAGE_CHANCE&quot;);</b>
+<b class="fc"><i>64</i>&nbsp;    INFILTRATOR_SIGHT_RANGE = getFloat(difficultyData,&quot;INFILTRATOR_SIGHT_RANGE&quot;);</b>
+<b class="fc"><i>65</i>&nbsp;    INFILTRATOR_PROJECTILE_SPEED = getFloat(difficultyData,&quot;INFILTRATOR_PROJECTILE_SPEED&quot;);</b>
+<b class="fc"><i>66</i>&nbsp;    MAX_INFILTRATORS = difficultyData.getInt(&quot;MAX_INFILTRATORS&quot;);</b>
+<b class="fc"><i>67</i>&nbsp;    INFILTRATOR_FIRING_INTERVAL = getFloat(difficultyData,&quot;INFILTRATOR_FIRING_INTERVAL&quot;);</b>
+<b class="fc"><i>68</i>&nbsp;    INFILTRATOR_PROJECTILE_DAMAGE = getFloat(difficultyData,&quot;INFILTRATOR_PROJECTILE_DAMAGE&quot;);</b>
+<b class="fc"><i>69</i>&nbsp;    MAX_INFILTRATORS_IN_GAME = difficultyData.getInt(&quot;MAX_INFILTRATORS_IN_GAME&quot;);</b>
+<b class="fc"><i>70</i>&nbsp;    JSONArray temp = (JSONArray) difficultyData.get(&quot;NPC_SPEED_VARIANCE&quot;);</b>
+<b class="fc"><i>71</i>&nbsp;    for (int i=0; i &lt; temp.length(); i++) {</b>
+<b class="fc"><i>72</i>&nbsp;      NPC_SPEED_VARIANCE[i] = (float) temp.getDouble(i);</b>
+<i>73</i>&nbsp;    }
+<b class="fc"><i>74</i>&nbsp;    NPC_FLEE_TIME = getFloat(difficultyData,&quot;NPC_FLEE_TIME&quot;);</b>
+<b class="fc"><i>75</i>&nbsp;    NPC_FLEE_MULTIPLIER = getFloat(difficultyData,&quot;NPC_FLEE_MULTIPLIER&quot;);</b>
+<b class="fc"><i>76</i>&nbsp;    NPC_MIN_FLEE_DISTANCE = getFloat(difficultyData,&quot;NPC_MIN_FLEE_DISTANCE&quot;);</b>
+<b class="fc"><i>77</i>&nbsp;    NPC_EAR_STRENGTH = getFloat(difficultyData,&quot;NPC_EAR_STRENGTH&quot;);</b>
+<b class="fc"><i>78</i>&nbsp;    NPC_COUNT = difficultyData.getInt(&quot;NPC_COUNT&quot;);</b>
+<b class="fc"><i>79</i>&nbsp;    PROJECTILE_SLOW_MULT = getFloat(difficultyData,&quot;PROJECTILE_SLOW_MULT&quot;);</b>
+<b class="fc"><i>80</i>&nbsp;    POWERUP_HEALTH_AMOUNT = getFloat(difficultyData,&quot;POWERUP_HEALTH_AMOUNT&quot;);</b>
+<b class="fc"><i>81</i>&nbsp;    POWERUP_SHIELD_AMOUNT = difficultyData.getInt(&quot;POWERUP_SHIELD_AMOUNT&quot;);</b>
+<b class="fc"><i>82</i>&nbsp;    POWERUP_SPEED_MULT = getFloat(difficultyData,&quot;POWERUP_SPEED_MULT&quot;);</b>
+<b class="fc"><i>83</i>&nbsp;    POWERUP_BOOM_RANGE = getFloat(difficultyData,&quot;POWERUP_BOOM_RANGE&quot;);</b>
+<b class="fc"><i>84</i>&nbsp;  }</b>
+<i>85</i>&nbsp;//&lt;/changed&gt;
+<i>86</i>&nbsp;  /** Number of infiltrators added, including defeated ones. */
+<b class="nc"><i>87</i>&nbsp;  public int infiltratorsAddedCount = 0;</b>
+<i>88</i>&nbsp;
+<b class="nc"><i>89</i>&nbsp;  public List&lt;GameEntity&gt; entities = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>90</i>&nbsp;  public List&lt;GameEntity&gt; newEntities = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>91</i>&nbsp;  public List&lt;GameEntity&gt; oldEntities = new ArrayList&lt;&gt;();</b>
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;  public OrthographicCamera camera = new OrthographicCamera();</b>
+<i>94</i>&nbsp;
+<b class="fc"><i>95</i>&nbsp;  public static final TiledMap map = new TmxMapLoader().load(&quot;map.tmx&quot;);</b>
+<b class="fc"><i>96</i>&nbsp;  public static final TiledMapTileSet tileset = map.getTileSets().getTileSet(0);</b>
+<i>97</i>&nbsp;  public TextureAtlas atlas;
+<i>98</i>&nbsp;
+<b class="nc"><i>99</i>&nbsp;  public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map);</b>
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;  public ArrayList&lt;RectangleMapObject&gt; systems;
+<i>102</i>&nbsp;  public RectangleMapObject medbay;
+<i>103</i>&nbsp;  public ArrayList&lt;float[]&gt; spawnLocations;
+<i>104</i>&nbsp;
+<b class="nc"><i>105</i>&nbsp;  public Random randomNumberGenerator = new Random();</b>
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;  // ------------------NAVIGATION----------------
+<b class="nc"><i>108</i>&nbsp;  public NavigationMesh navigationMesh = new NavigationMesh(</b>
+<b class="nc"><i>109</i>&nbsp;      (TiledMapTileLayer) map.getLayers().get(&quot;navigation_layer&quot;)</b>
+<i>110</i>&nbsp;      );
+<i>111</i>&nbsp;  public ArrayList&lt;float[]&gt; fleePoints;
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;  /** Coordinates for the bottom left and top right tiles of the brig. */
+<b class="fc"><i>114</i>&nbsp;  public static final float[][] BRIG_BOUNDS = {{240f, 608f}, {352f, 640f}};</b>
+<i>115</i>&nbsp;  /** Coordinates for the medbay teleporter. */
+<b class="fc"><i>116</i>&nbsp;  public static final float[] MEDBAY_COORDINATES = {96f, 640f};</b>
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;  // --------------------AUBER-------------------
+<b class="nc"><i>119</i>&nbsp;  public float auberTeleporterCharge = 0f;</b>
+<i>120</i>&nbsp;  /** The rate at which the teleporter ray charges. */
+<i>121</i>&nbsp;  //&lt;changed removed &quot;final&quot; from difficulty effected values + removed values&gt;
+<i>122</i>&nbsp;  public static float AUBER_CHARGE_RATE;
+<i>123</i>&nbsp;  /** The time the ray should visibly render for. */
+<i>124</i>&nbsp;  public static final float AUBER_RAY_TIME = 0.25f;
+<i>125</i>&nbsp;  /** The time a debuff should last for (with the exception of blindness). */
+<i>126</i>&nbsp;  public static float AUBER_DEBUFF_TIME;
+<i>127</i>&nbsp;  //&lt;changed added&gt;
+<i>128</i>&nbsp;  /** The time a buff should last for (with the exception of shield and health). */
+<i>129</i>&nbsp;  public static float AUBER_BUFF_TIME;
+<i>130</i>&nbsp;  //&lt;/changed&gt;
+<i>131</i>&nbsp;  /** The rate at which auber should heal. */
+<i>132</i>&nbsp;  public static float AUBER_HEAL_RATE;
+<i>133</i>&nbsp;  //&lt;/changed&gt;
+<b class="fc"><i>134</i>&nbsp;  public static final Color rayColorA = new Color(0.106f, 0.71f, 0.714f, 1f);</b>
+<b class="fc"><i>135</i>&nbsp;  public static final Color rayColorB = new Color(0.212f, 1f, 1f, 0.7f);</b>
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;  // ------------------RENDERING-----------------
+<i>138</i>&nbsp;  /** IDs of layers that should be rendered behind entities. */
+<b class="nc"><i>139</i>&nbsp;  public final int[] backgroundLayersIds = {</b>
+<b class="nc"><i>140</i>&nbsp;    map.getLayers().getIndex(&quot;background_layer&quot;),</b>
+<i>141</i>&nbsp;    };
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;  /** IDs of layers that should be rendered infront of entities. */
+<b class="nc"><i>144</i>&nbsp;  public final int[] foregroundLayersIds = {</b>
+<b class="nc"><i>145</i>&nbsp;    map.getLayers().getIndex(&quot;foreground_layer&quot;),</b>
+<b class="nc"><i>146</i>&nbsp;    map.getLayers().getIndex(&quot;collision_layer&quot;)</b>
+<i>147</i>&nbsp;    };
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;  /** An enum containing information about all dynamic/frequently accessed tiles. */
+<b class="nc"><i>151</i>&nbsp;  public static enum Tiles {</b>
+<b class="nc"><i>152</i>&nbsp;    WALL_SYSTEM(38),</b>
+<b class="nc"><i>153</i>&nbsp;    STANDALONE_SYSTEM(62),</b>
+<b class="nc"><i>154</i>&nbsp;    STANDALONE_SYSTEM_LIGHT(50),</b>
+<i>155</i>&nbsp;
+<b class="nc"><i>156</i>&nbsp;    WALL_SYSTEM_ATTACKED(40),</b>
+<b class="nc"><i>157</i>&nbsp;    STANDALONE_SYSTEM_ATTACKED(64),</b>
+<b class="nc"><i>158</i>&nbsp;    STANDALONE_SYSTEM_LIGHT_ATTACKED(52),</b>
+<i>159</i>&nbsp;
+<b class="nc"><i>160</i>&nbsp;    WALL_SYSTEM_DESTROYED(42),</b>
+<b class="nc"><i>161</i>&nbsp;    STANDALONE_SYSTEM_DESTROYED(66),</b>
+<b class="nc"><i>162</i>&nbsp;    STANDALONE_SYSTEM_LIGHT_DESTROYED(54),</b>
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;    // Pathfinding tiles
+<b class="nc"><i>165</i>&nbsp;    FLEE_POINT(57);</b>
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;    public final int tileId;
+<i>170</i>&nbsp;
+<b class="nc"><i>171</i>&nbsp;    Tiles(int tileId) {</b>
+<b class="nc"><i>172</i>&nbsp;      this.tileId = tileId;</b>
+<i>173</i>&nbsp;    }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    /**
+<i>176</i>&nbsp;     * Return a cell object for a given tile type via its tileId.
+<i>177</i>&nbsp;     *
+<i>178</i>&nbsp;     * @return A cell object for the given tile ID
+<i>179</i>&nbsp;     * */
+<i>180</i>&nbsp;    public Cell getCell() {
+<b class="nc"><i>181</i>&nbsp;      Cell output = new Cell();</b>
+<b class="nc"><i>182</i>&nbsp;      output.setTile(tileset.getTile(tileId));</b>
+<b class="nc"><i>183</i>&nbsp;      return output;</b>
+<i>184</i>&nbsp;    }
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    /**
+<i>187</i>&nbsp;     * Return a tile from this enum by a given tile ID.
+<i>188</i>&nbsp;     *
+<i>189</i>&nbsp;     * @param id The ID of the {@link Tiles} object to return
+<i>190</i>&nbsp;     * @return A {@link Tiles} object of the given ID
+<i>191</i>&nbsp;     * @throws IllegalArgumentException Thrown if no tile could be found with the given ID
+<i>192</i>&nbsp;     * */
+<i>193</i>&nbsp;    public static Tiles getTileById(int id) {
+<b class="nc"><i>194</i>&nbsp;      for (Tiles tile : Tiles.values()) {</b>
+<b class="nc"><i>195</i>&nbsp;        if (tile.tileId == id) {</b>
+<b class="nc"><i>196</i>&nbsp;          return tile;</b>
+<i>197</i>&nbsp;        }
+<i>198</i>&nbsp;      }
+<b class="nc"><i>199</i>&nbsp;      throw new IllegalArgumentException(&quot;Tile of given ID not found.&quot;);</b>
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;  }
+<i>202</i>&nbsp;//&lt;changed removed &quot;final&quot; from difficulty effected values&gt; + removed values
+<i>203</i>&nbsp;  /** The amount of time it takes for an infiltrator to sabotage a system. */
+<i>204</i>&nbsp;  public static float SYSTEM_BREAK_TIME;
+<i>205</i>&nbsp;  /** The chance an infiltrator will sabotage after pathfinding to a system. */
+<i>206</i>&nbsp;  public static float SYSTEM_SABOTAGE_CHANCE;
+<i>207</i>&nbsp;  /** The distance the infiltrator can see. Default: 5 tiles */
+<i>208</i>&nbsp;  public static float INFILTRATOR_SIGHT_RANGE;
+<i>209</i>&nbsp;  /** The speed at which infiltrator projectiles should travel. */
+<i>210</i>&nbsp;  public static float INFILTRATOR_PROJECTILE_SPEED;
+<i>211</i>&nbsp;  /** Maximum infiltrators in a full game of Auber (including defated ones). */
+<i>212</i>&nbsp;  public static int MAX_INFILTRATORS;
+<i>213</i>&nbsp;  /** The interval at which the infiltrator should attack the player when exposed. */
+<i>214</i>&nbsp;  public static float INFILTRATOR_FIRING_INTERVAL;
+<i>215</i>&nbsp;  /** The damage a projectile should do. */
+<i>216</i>&nbsp;  public static float INFILTRATOR_PROJECTILE_DAMAGE;
+<i>217</i>&nbsp;  /**
+<i>218</i>&nbsp;   * Max infiltrators alive at a given point, Should always be greater or equal to
+<i>219</i>&nbsp;   * {@link World#MAX_INFILTRATORS}.
+<i>220</i>&nbsp;   * */
+<i>221</i>&nbsp;  public static int MAX_INFILTRATORS_IN_GAME;
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;  /** The amount of variance there should be between the speeds of different NPCs. */
+<b class="fc"><i>224</i>&nbsp;  public static float[] NPC_SPEED_VARIANCE = {0.8f, 1.2f};//kept to be writen over</b>
+<i>225</i>&nbsp;  /** The maximum amount of time (in seconds) an NPC should flee for. */
+<i>226</i>&nbsp;  public static float NPC_FLEE_TIME;
+<i>227</i>&nbsp;  /** The speed multiplier an NPC should receive when fleeing. */
+<i>228</i>&nbsp;  public static float NPC_FLEE_MULTIPLIER;
+<i>229</i>&nbsp;  /** The shortest distance an NPC should move from its current position when fleeing. */
+<i>230</i>&nbsp;  public static float NPC_MIN_FLEE_DISTANCE;
+<i>231</i>&nbsp;  /** The distance an NPC can here the teleporter ray shoot from. */
+<i>232</i>&nbsp;  public static float NPC_EAR_STRENGTH;
+<i>233</i>&nbsp;  /** The number of NPCs in the game. */
+<i>234</i>&nbsp;  public static int NPC_COUNT;
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;  /** the speed multiplier from being slowed */
+<i>237</i>&nbsp;  public static float PROJECTILE_SLOW_MULT;
+<i>238</i>&nbsp;
+<i>239</i>&nbsp;  //&lt;changed&gt;
+<i>240</i>&nbsp;  /** The health gain from a health powerup */
+<i>241</i>&nbsp;  public static float POWERUP_HEALTH_AMOUNT;
+<i>242</i>&nbsp;  /** The shield gain from a shield powerup */
+<i>243</i>&nbsp;  public static int POWERUP_SHIELD_AMOUNT;
+<i>244</i>&nbsp;  /** The speed multiplier from a speed powerup */
+<i>245</i>&nbsp;  public static float POWERUP_SPEED_MULT;
+<i>246</i>&nbsp;  /** */
+<i>247</i>&nbsp;  public static float POWERUP_BOOM_RANGE;
+<i>248</i>&nbsp;  //&lt;/changed&gt;
+<i>249</i>&nbsp;  //&lt;/changed&gt;
+<b class="nc"><i>250</i>&nbsp;  public static enum SystemStates {</b>
+<b class="nc"><i>251</i>&nbsp;    WORKING,</b>
+<b class="nc"><i>252</i>&nbsp;    ATTACKED,</b>
+<b class="nc"><i>253</i>&nbsp;    DESTROYED</b>
+<i>254</i>&nbsp;  }
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;  /**
+<i>257</i>&nbsp;   * Initialise the game world.
+<i>258</i>&nbsp;   *
+<i>259</i>&nbsp;   * @param game The game object.
+<i>260</i>&nbsp;   * */
+<b class="nc"><i>261</i>&nbsp;  public World(AuberGame game) {</b>
+<b class="nc"><i>262</i>&nbsp;    this.game = game;</b>
+<b class="nc"><i>263</i>&nbsp;    atlas = game.atlas;</b>
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;    // Configure the camera
+<b class="nc"><i>266</i>&nbsp;    camera.setToOrtho(false, 480, 270);</b>
+<b class="nc"><i>267</i>&nbsp;    camera.update();</b>
+<i>268</i>&nbsp;
+<b class="nc"><i>269</i>&nbsp;    Player player = new Player(64f, 64f, this);</b>
+<b class="nc"><i>270</i>&nbsp;    queueEntityAdd(player);</b>
+<b class="nc"><i>271</i>&nbsp;    this.player = player;</b>
+<i>272</i>&nbsp;
+<b class="nc"><i>273</i>&nbsp;    systems = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>274</i>&nbsp;    MapObjects objects = map.getLayers().get(&quot;object_layer&quot;).getObjects();</b>
+<b class="nc"><i>275</i>&nbsp;    for (MapObject object : objects) {</b>
+<b class="nc"><i>276</i>&nbsp;      if (object instanceof RectangleMapObject) {</b>
+<b class="nc"><i>277</i>&nbsp;        RectangleMapObject rectangularObject = (RectangleMapObject) object;</b>
+<b class="nc"><i>278</i>&nbsp;        switch (rectangularObject.getProperties().get(&quot;type&quot;, String.class)) {</b>
+<i>279</i>&nbsp;          case &quot;system&quot;:
+<b class="nc"><i>280</i>&nbsp;            systems.add(rectangularObject);</b>
+<b class="nc"><i>281</i>&nbsp;            break;</b>
+<i>282</i>&nbsp;          case &quot;medbay&quot;:
+<b class="nc"><i>283</i>&nbsp;            medbay = rectangularObject;</b>
+<b class="nc"><i>284</i>&nbsp;            break;</b>
+<i>285</i>&nbsp;          default:
+<i>286</i>&nbsp;            break;
+<i>287</i>&nbsp;        }
+<i>288</i>&nbsp;      }
+<b class="nc"><i>289</i>&nbsp;    }</b>
+<b class="nc"><i>290</i>&nbsp;    spawnLocations = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>291</i>&nbsp;    fleePoints = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>292</i>&nbsp;    TiledMapTileLayer navigationLayer = (TiledMapTileLayer) map.getLayers().get(&quot;navigation_layer&quot;);</b>
+<b class="nc"><i>293</i>&nbsp;    for (int y = 0; y &lt; navigationLayer.getHeight(); y++) {</b>
+<b class="nc"><i>294</i>&nbsp;      for (int x = 0; x &lt; navigationLayer.getWidth(); x++) {</b>
+<b class="nc"><i>295</i>&nbsp;        Cell currentCell = navigationLayer.getCell(x, y);</b>
+<b class="nc"><i>296</i>&nbsp;        float[] cellCoordinates = {x * navigationLayer.getTileWidth(),</b>
+<b class="nc"><i>297</i>&nbsp;                                   y * navigationLayer.getTileHeight()};</b>
+<b class="nc"><i>298</i>&nbsp;        if (currentCell != null) {</b>
+<b class="nc"><i>299</i>&nbsp;          spawnLocations.add(cellCoordinates);</b>
+<b class="nc"><i>300</i>&nbsp;          if (currentCell.getTile().getId() == Tiles.FLEE_POINT.tileId) {</b>
+<b class="nc"><i>301</i>&nbsp;            fleePoints.add(cellCoordinates);</b>
+<i>302</i>&nbsp;          }
+<i>303</i>&nbsp;        }
+<i>304</i>&nbsp;      }
+<i>305</i>&nbsp;    }
+<b class="nc"><i>306</i>&nbsp;  }</b>
+<i>307</i>&nbsp;
+<i>308</i>&nbsp;  /**
+<i>309</i>&nbsp;   * Initialise an instance of the world with the given game object.
+<i>310</i>&nbsp;   * Demo mode locks the player to the center of the screen, makes them invisible and expands the
+<i>311</i>&nbsp;   * camera to view the whole map.
+<i>312</i>&nbsp;   *
+<i>313</i>&nbsp;   * @param game The game object
+<i>314</i>&nbsp;   * @param demoMode Whether to run the game in demo mode
+<i>315</i>&nbsp;   * */
+<i>316</i>&nbsp;  public World(AuberGame game, boolean demoMode) {
+<b class="nc"><i>317</i>&nbsp;    this(game);</b>
+<b class="nc"><i>318</i>&nbsp;    this.demoMode = demoMode;</b>
+<b class="nc"><i>319</i>&nbsp;    if (demoMode) {</b>
+<b class="nc"><i>320</i>&nbsp;      camera.setToOrtho(false, 1920, 1080);</b>
+<b class="nc"><i>321</i>&nbsp;      TiledMapTileLayer layer = ((TiledMapTileLayer) map.getLayers().get(2));</b>
+<b class="nc"><i>322</i>&nbsp;      player.position.x = (layer.getWidth() * layer.getTileWidth()) / 2;</b>
+<b class="nc"><i>323</i>&nbsp;      player.position.y = (layer.getHeight() * layer.getTileHeight()) / 2;</b>
+<b class="nc"><i>324</i>&nbsp;      player.sprite.setColor(1f, 1f, 1f, 0f);</b>
+<i>325</i>&nbsp;    }
+<b class="nc"><i>326</i>&nbsp;  }</b>
+<i>327</i>&nbsp;
+<i>328</i>&nbsp;  public void addEntity(GameEntity entity) {
+<b class="nc"><i>329</i>&nbsp;    entities.add(entity);</b>
+<b class="nc"><i>330</i>&nbsp;  }</b>
+<i>331</i>&nbsp;
+<i>332</i>&nbsp;  public List&lt;GameEntity&gt; getEntities() {
+<b class="nc"><i>333</i>&nbsp;    return entities;</b>
+<i>334</i>&nbsp;  }
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;  /**
+<i>337</i>&nbsp;   * Queue an entity to be added.
+<i>338</i>&nbsp;   *
+<i>339</i>&nbsp;   * @param entity The entity to queue
+<i>340</i>&nbsp;   * */
+<i>341</i>&nbsp;  public void queueEntityAdd(GameEntity entity) {
+<b class="nc"><i>342</i>&nbsp;    newEntities.add(entity);</b>
+<b class="nc"><i>343</i>&nbsp;  }</b>
+<i>344</i>&nbsp;
+<i>345</i>&nbsp;  /**
+<i>346</i>&nbsp;   * Queue an entity to be removed.
+<i>347</i>&nbsp;   *
+<i>348</i>&nbsp;   * @param entity The entity to queue
+<i>349</i>&nbsp;   * */
+<i>350</i>&nbsp;  public void queueEntityRemove(GameEntity entity) {
+<b class="nc"><i>351</i>&nbsp;    oldEntities.add(entity);</b>
+<b class="nc"><i>352</i>&nbsp;  }</b>
+<i>353</i>&nbsp;
+<i>354</i>&nbsp;  /**
+<i>355</i>&nbsp;   * Apply any queued entity removals/additions to the world.
+<i>356</i>&nbsp;   * */
+<i>357</i>&nbsp;  public void updateEntities() {
+<b class="nc"><i>358</i>&nbsp;    entities.addAll(newEntities);</b>
+<b class="nc"><i>359</i>&nbsp;    entities.removeAll(oldEntities);</b>
+<b class="nc"><i>360</i>&nbsp;    newEntities.clear();</b>
+<b class="nc"><i>361</i>&nbsp;    oldEntities.clear();</b>
+<b class="nc"><i>362</i>&nbsp;  }</b>
+<i>363</i>&nbsp;
+<i>364</i>&nbsp;  /**
+<i>365</i>&nbsp;   * Update the sprite of a system to match a new state.
+<i>366</i>&nbsp;   *
+<i>367</i>&nbsp;   * @param x The x coordinate of the system object (not the tile)
+<i>368</i>&nbsp;   * @param y The y coordinate of the system object (not the tile)
+<i>369</i>&nbsp;   * @param newState The new state of the system
+<i>370</i>&nbsp;   **/
+<i>371</i>&nbsp;  public void updateSystemState(float x, float y, SystemStates newState) {
+<b class="nc"><i>372</i>&nbsp;    TiledMapTileLayer collisionLayer = (TiledMapTileLayer) World.map.getLayers()</b>
+<b class="nc"><i>373</i>&nbsp;        .get(&quot;collision_layer&quot;);</b>
+<i>374</i>&nbsp;
+<b class="nc"><i>375</i>&nbsp;    int[] systemPosition = {</b>
+<b class="nc"><i>376</i>&nbsp;      (int) x / collisionLayer.getTileWidth(),</b>
+<b class="nc"><i>377</i>&nbsp;      (int) (y / collisionLayer.getTileHeight()) + 1</b>
+<i>378</i>&nbsp;      };
+<i>379</i>&nbsp;
+<b class="nc"><i>380</i>&nbsp;    Cell attackedSystemCell = collisionLayer.getCell(systemPosition[0], systemPosition[1]);</b>
+<b class="nc"><i>381</i>&nbsp;    int targetTileId = attackedSystemCell.getTile().getId();</b>
+<i>382</i>&nbsp;
+<b class="nc"><i>383</i>&nbsp;    if (targetTileId == World.Tiles.STANDALONE_SYSTEM.tileId</b>
+<i>384</i>&nbsp;        || targetTileId == World.Tiles.STANDALONE_SYSTEM_ATTACKED.tileId
+<i>385</i>&nbsp;        || targetTileId == World.Tiles.STANDALONE_SYSTEM_DESTROYED.tileId) {
+<i>386</i>&nbsp;      Cell newSystem;
+<i>387</i>&nbsp;      Cell newSystemLight;
+<i>388</i>&nbsp;
+<b class="nc"><i>389</i>&nbsp;      switch (newState) {</b>
+<i>390</i>&nbsp;        case WORKING:
+<b class="nc"><i>391</i>&nbsp;          newSystem = World.Tiles.STANDALONE_SYSTEM.getCell();</b>
+<b class="nc"><i>392</i>&nbsp;          newSystemLight = World.Tiles.STANDALONE_SYSTEM_LIGHT.getCell();</b>
+<b class="nc"><i>393</i>&nbsp;          break;</b>
+<i>394</i>&nbsp;        case ATTACKED:
+<b class="nc"><i>395</i>&nbsp;          newSystem = World.Tiles.STANDALONE_SYSTEM_ATTACKED.getCell();</b>
+<b class="nc"><i>396</i>&nbsp;          newSystemLight = World.Tiles.STANDALONE_SYSTEM_LIGHT_ATTACKED.getCell();</b>
+<b class="nc"><i>397</i>&nbsp;          break;</b>
+<i>398</i>&nbsp;        case DESTROYED:
+<b class="nc"><i>399</i>&nbsp;          newSystem = World.Tiles.STANDALONE_SYSTEM_DESTROYED.getCell();</b>
+<b class="nc"><i>400</i>&nbsp;          newSystemLight = World.Tiles.STANDALONE_SYSTEM_LIGHT_DESTROYED.getCell();</b>
+<b class="nc"><i>401</i>&nbsp;          break;</b>
+<i>402</i>&nbsp;        default:
+<i>403</i>&nbsp;          // This line will never fire, However it needs to be here otherwise Java
+<i>404</i>&nbsp;          // will think that theres a chance newSystem and newSystemLight may not have been
+<i>405</i>&nbsp;          // initiated even though every enum state is covered
+<b class="nc"><i>406</i>&nbsp;          return;</b>
+<i>407</i>&nbsp;      }
+<b class="nc"><i>408</i>&nbsp;      collisionLayer.setCell(systemPosition[0], systemPosition[1], newSystem);</b>
+<i>409</i>&nbsp;
+<b class="nc"><i>410</i>&nbsp;      TiledMapTileLayer foregroundLayer = (TiledMapTileLayer) map.getLayers()</b>
+<b class="nc"><i>411</i>&nbsp;          .get(&quot;foreground_layer&quot;);</b>
+<b class="nc"><i>412</i>&nbsp;      foregroundLayer.setCell(systemPosition[0], systemPosition[1] + 1, newSystemLight);</b>
+<b class="nc"><i>413</i>&nbsp;    } else {</b>
+<i>414</i>&nbsp;      Cell newSystem;
+<b class="nc"><i>415</i>&nbsp;      switch (newState) {</b>
+<i>416</i>&nbsp;        case WORKING:
+<b class="nc"><i>417</i>&nbsp;          newSystem = World.Tiles.WALL_SYSTEM.getCell();</b>
+<b class="nc"><i>418</i>&nbsp;          break;</b>
+<i>419</i>&nbsp;        case ATTACKED:
+<b class="nc"><i>420</i>&nbsp;          newSystem = World.Tiles.WALL_SYSTEM_ATTACKED.getCell();</b>
+<b class="nc"><i>421</i>&nbsp;          break;</b>
+<i>422</i>&nbsp;        case DESTROYED:
+<b class="nc"><i>423</i>&nbsp;          newSystem = World.Tiles.WALL_SYSTEM_DESTROYED.getCell();</b>
+<b class="nc"><i>424</i>&nbsp;          break;</b>
+<i>425</i>&nbsp;        default:
+<i>426</i>&nbsp;          // See above
+<b class="nc"><i>427</i>&nbsp;          return;</b>
+<i>428</i>&nbsp;      }
+<b class="nc"><i>429</i>&nbsp;      collisionLayer.setCell(systemPosition[0], systemPosition[1], newSystem);</b>
+<i>430</i>&nbsp;    }
+<i>431</i>&nbsp;
+<b class="nc"><i>432</i>&nbsp;    if (newState == SystemStates.DESTROYED) {</b>
+<b class="nc"><i>433</i>&nbsp;      for (RectangleMapObject system : systems) {</b>
+<b class="nc"><i>434</i>&nbsp;        if (system.getRectangle().getX() == x</b>
+<b class="nc"><i>435</i>&nbsp;            &amp;&amp; system.getRectangle().getY() == y) {</b>
+<b class="nc"><i>436</i>&nbsp;          systems.remove(system);</b>
+<b class="nc"><i>437</i>&nbsp;          break;</b>
+<i>438</i>&nbsp;        }
+<b class="nc"><i>439</i>&nbsp;      }</b>
+<i>440</i>&nbsp;    }
+<b class="nc"><i>441</i>&nbsp;  }</b>
+<i>442</i>&nbsp;
+<i>443</i>&nbsp;  /**
+<i>444</i>&nbsp;   * Return the state of a system, given the coordinates of the system object (not the tile).
+<i>445</i>&nbsp;   *
+<i>446</i>&nbsp;   * @param x The x coordinate to check
+<i>447</i>&nbsp;   * @param y The y coordinate to check
+<i>448</i>&nbsp;   * @return A {@link SystemStates} representing the state of the system
+<i>449</i>&nbsp;   * @throws IllegalArgumentException if a standalone system light is at the coordinates provided
+<i>450</i>&nbsp;   * */
+<i>451</i>&nbsp;  public SystemStates getSystemState(float x, float y) {
+<b class="nc"><i>452</i>&nbsp;    TiledMapTileLayer collisionLayer = (TiledMapTileLayer) World.map.getLayers()</b>
+<b class="nc"><i>453</i>&nbsp;        .get(&quot;collision_layer&quot;);</b>
+<i>454</i>&nbsp;
+<b class="nc"><i>455</i>&nbsp;    int[] systemPosition = {</b>
+<b class="nc"><i>456</i>&nbsp;      (int) x / collisionLayer.getTileWidth(),</b>
+<b class="nc"><i>457</i>&nbsp;      (int) (y / collisionLayer.getTileHeight()) + 1</b>
+<i>458</i>&nbsp;      };
+<i>459</i>&nbsp;
+<b class="nc"><i>460</i>&nbsp;    Cell attackedSystemCell = collisionLayer.getCell(systemPosition[0], systemPosition[1]);</b>
+<b class="nc"><i>461</i>&nbsp;    if (attackedSystemCell == null) {</b>
+<b class="nc"><i>462</i>&nbsp;      throw new IllegalArgumentException(&quot;No tile at given coordinates&quot;);</b>
+<i>463</i>&nbsp;    }
+<i>464</i>&nbsp;
+<b class="nc"><i>465</i>&nbsp;    Tiles targetTile = Tiles.getTileById(attackedSystemCell.getTile().getId());</b>
+<i>466</i>&nbsp;
+<b class="nc"><i>467</i>&nbsp;    switch (targetTile) {</b>
+<i>468</i>&nbsp;      case WALL_SYSTEM:
+<i>469</i>&nbsp;      case STANDALONE_SYSTEM:
+<b class="nc"><i>470</i>&nbsp;        return SystemStates.WORKING;</b>
+<i>471</i>&nbsp;
+<i>472</i>&nbsp;      case WALL_SYSTEM_ATTACKED:
+<i>473</i>&nbsp;      case STANDALONE_SYSTEM_ATTACKED:
+<b class="nc"><i>474</i>&nbsp;        return SystemStates.ATTACKED;</b>
+<i>475</i>&nbsp;
+<i>476</i>&nbsp;      case WALL_SYSTEM_DESTROYED:
+<i>477</i>&nbsp;      case STANDALONE_SYSTEM_DESTROYED:
+<b class="nc"><i>478</i>&nbsp;        return SystemStates.DESTROYED;</b>
+<i>479</i>&nbsp;
+<i>480</i>&nbsp;      default:
+<b class="nc"><i>481</i>&nbsp;        throw new IllegalArgumentException(&quot;Use the coordinates of the System object on the&quot;</b>
+<b class="nc"><i>482</i>&nbsp;                                           .concat(&quot;tilemap - not the system tile.&quot;));</b>
+<i>483</i>&nbsp;    }
+<i>484</i>&nbsp;  }
+<i>485</i>&nbsp;
+<i>486</i>&nbsp;  public SystemStates getSystemState(RectangleMapObject system) {
+<b class="nc"><i>487</i>&nbsp;    return getSystemState(system.getRectangle().x, system.getRectangle().y);</b>
+<i>488</i>&nbsp;  }
+<i>489</i>&nbsp;
+<i>490</i>&nbsp;  /**
+<i>491</i>&nbsp;   * Check to see if any of the end conditions have been met, if so update the screen.
+<i>492</i>&nbsp;   * */
+<i>493</i>&nbsp;  public void checkForEndState() {
+<b class="nc"><i>494</i>&nbsp;    if (systems.isEmpty()) {</b>
+<b class="nc"><i>495</i>&nbsp;      if (!demoMode) {</b>
+<b class="nc"><i>496</i>&nbsp;        game.setScreen(new GameOverScreen(game, false));</b>
+<i>497</i>&nbsp;      } else {
+<b class="nc"><i>498</i>&nbsp;        game.setScreen(new GameScreen(game, true));</b>
+<i>499</i>&nbsp;      }
+<b class="nc"><i>500</i>&nbsp;    } else if (infiltratorCount &lt;= 0) {</b>
+<b class="nc"><i>501</i>&nbsp;      game.setScreen(new GameOverScreen(game, true));</b>
+<i>502</i>&nbsp;    }
+<b class="nc"><i>503</i>&nbsp;  }</b>
+<i>504</i>&nbsp;  //&lt;changed&gt;
+<i>505</i>&nbsp;  public JSONObject toJSON(){
+<b class="nc"><i>506</i>&nbsp;    JSONObject world = new JSONObject();</b>
+<b class="nc"><i>507</i>&nbsp;    for (String difficulty : gameData.keySet()) {</b>
+<b class="nc"><i>508</i>&nbsp;      if (gameData.get(difficulty).equals(difficultyData)){</b>
+<b class="nc"><i>509</i>&nbsp;        world.put(&quot;difficulty&quot;,difficulty);</b>
+<b class="nc"><i>510</i>&nbsp;        break;</b>
+<i>511</i>&nbsp;      }
+<b class="nc"><i>512</i>&nbsp;    }</b>
+<b class="nc"><i>513</i>&nbsp;    world.put(&quot;player&quot;,player.toJSON(this));</b>
+<b class="nc"><i>514</i>&nbsp;    world.put(&quot;auberTeleporterCharge&quot;,auberTeleporterCharge);</b>
+<b class="nc"><i>515</i>&nbsp;    world.put(&quot;infiltratorCount&quot;,infiltratorCount);</b>
+<b class="nc"><i>516</i>&nbsp;    world.put(&quot;infiltratorsAddedCount&quot;,infiltratorsAddedCount);</b>
+<b class="nc"><i>517</i>&nbsp;    world.put(&quot;demoMode&quot;,demoMode);</b>
+<b class="nc"><i>518</i>&nbsp;    JSONArray systems = new JSONArray();</b>
+<b class="nc"><i>519</i>&nbsp;    for (RectangleMapObject _system : this.systems) {</b>
+<b class="nc"><i>520</i>&nbsp;      JSONObject system = new JSONObject();</b>
+<b class="nc"><i>521</i>&nbsp;      system.put(&quot;x&quot;,_system.getRectangle().getX());</b>
+<b class="nc"><i>522</i>&nbsp;      system.put(&quot;y&quot;,_system.getRectangle().getY());</b>
+<b class="nc"><i>523</i>&nbsp;      system.put(&quot;state&quot;,getSystemState(_system).name());</b>
+<b class="nc"><i>524</i>&nbsp;      systems.put(system);</b>
+<b class="nc"><i>525</i>&nbsp;    }</b>
+<b class="nc"><i>526</i>&nbsp;    world.put(&quot;systems&quot;,systems);</b>
+<b class="nc"><i>527</i>&nbsp;    return world;</b>
+<i>528</i>&nbsp;  }
+<i>529</i>&nbsp;  /**
+<i>530</i>&nbsp;   * Creates a world from a given state
+<i>531</i>&nbsp;   * 
+<i>532</i>&nbsp;   * @param game    The game object
+<i>533</i>&nbsp;   * @param world    the JSONObject
+<i>534</i>&nbsp;   */
+<b class="nc"><i>535</i>&nbsp;  public World(AuberGame game,JSONObject world){</b>
+<b class="nc"><i>536</i>&nbsp;    this.game = game;</b>
+<b class="nc"><i>537</i>&nbsp;    atlas = game.atlas;</b>
+<i>538</i>&nbsp;
+<i>539</i>&nbsp;    // Configure the camera
+<b class="nc"><i>540</i>&nbsp;    camera.setToOrtho(false, 480, 270);</b>
+<b class="nc"><i>541</i>&nbsp;    camera.update();</b>
+<i>542</i>&nbsp;    //stored info
+<b class="nc"><i>543</i>&nbsp;    changeDifficulty(world.getString(&quot;difficulty&quot;));</b>
+<b class="nc"><i>544</i>&nbsp;    this.player = new Player(world.getJSONObject(&quot;player&quot;),this);</b>
+<b class="nc"><i>545</i>&nbsp;    queueEntityAdd(player);</b>
+<b class="nc"><i>546</i>&nbsp;    auberTeleporterCharge = world.getFloat(&quot;auberTeleporterCharge&quot;);</b>
+<b class="nc"><i>547</i>&nbsp;    infiltratorCount = world.getInt(&quot;infiltratorCount&quot;);</b>
+<b class="nc"><i>548</i>&nbsp;    infiltratorsAddedCount = world.getInt(&quot;infiltratorsAddedCount&quot;);</b>
+<i>549</i>&nbsp;    //systems
+<b class="nc"><i>550</i>&nbsp;    systems = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>551</i>&nbsp;    MapObjects objects = map.getLayers().get(&quot;object_layer&quot;).getObjects();</b>
+<b class="nc"><i>552</i>&nbsp;    for (MapObject object : objects) {</b>
+<b class="nc"><i>553</i>&nbsp;      if (object instanceof RectangleMapObject) {</b>
+<b class="nc"><i>554</i>&nbsp;        RectangleMapObject rectangularObject = (RectangleMapObject) object;</b>
+<b class="nc"><i>555</i>&nbsp;        switch (rectangularObject.getProperties().get(&quot;type&quot;, String.class)) {</b>
+<i>556</i>&nbsp;          case &quot;system&quot;:
+<b class="nc"><i>557</i>&nbsp;            systems.add(rectangularObject);</b>
+<b class="nc"><i>558</i>&nbsp;            break;</b>
+<i>559</i>&nbsp;          case &quot;medbay&quot;:
+<b class="nc"><i>560</i>&nbsp;            medbay = rectangularObject;</b>
+<b class="nc"><i>561</i>&nbsp;            break;</b>
+<i>562</i>&nbsp;          default:
+<i>563</i>&nbsp;            break;
+<i>564</i>&nbsp;        }
+<i>565</i>&nbsp;      }
+<b class="nc"><i>566</i>&nbsp;    }</b>
+<b class="nc"><i>567</i>&nbsp;    JSONArray jsystems = world.getJSONArray(&quot;systems&quot;);</b>
+<b class="nc"><i>568</i>&nbsp;    ArrayList&lt;Vector2&gt; newVs = new ArrayList();</b>
+<b class="nc"><i>569</i>&nbsp;    ArrayList&lt;SystemStates&gt; newStates = new ArrayList();</b>
+<b class="nc"><i>570</i>&nbsp;    for (int i = 0; i &lt; jsystems.length(); i++) {</b>
+<b class="nc"><i>571</i>&nbsp;      JSONObject jsystem = jsystems.getJSONObject(i);</b>
+<b class="nc"><i>572</i>&nbsp;      newVs.add(new Vector2(jsystem.getFloat(&quot;x&quot;),jsystem.getFloat(&quot;y&quot;)));</b>
+<b class="nc"><i>573</i>&nbsp;      newStates.add(SystemStates.valueOf(jsystem.getString(&quot;state&quot;)));</b>
+<i>574</i>&nbsp;    }
+<b class="nc"><i>575</i>&nbsp;    for (int i = systems.size() -1; i &gt;= 0; i -= 1) {</b>
+<b class="nc"><i>576</i>&nbsp;      Vector2 oldV = new Vector2(systems.get(i).getRectangle().getX(),systems.get(i).getRectangle().getY());</b>
+<b class="nc"><i>577</i>&nbsp;      if (newVs.contains(oldV)){</b>
+<b class="nc"><i>578</i>&nbsp;        updateSystemState(oldV.x, oldV.y, newStates.get(newVs.indexOf(oldV)));</b>
+<i>579</i>&nbsp;      }else{
+<b class="nc"><i>580</i>&nbsp;        updateSystemState(oldV.x, oldV.y, SystemStates.DESTROYED);</b>
+<i>581</i>&nbsp;      }
+<i>582</i>&nbsp;    }
+<b class="nc"><i>583</i>&nbsp;    for (RectangleMapObject system : systems) {</b>
+<b class="nc"><i>584</i>&nbsp;      Vector2 oldV = new Vector2(system.getRectangle().getX(),system.getRectangle().getY());</b>
+<b class="nc"><i>585</i>&nbsp;      if (newVs.contains(oldV)){</b>
+<b class="nc"><i>586</i>&nbsp;        updateSystemState(oldV.x, oldV.y, newStates.get(newVs.indexOf(oldV)));</b>
+<i>587</i>&nbsp;      }else{
+<b class="nc"><i>588</i>&nbsp;        updateSystemState(oldV.x, oldV.y, SystemStates.DESTROYED);</b>
+<i>589</i>&nbsp;      }
+<b class="nc"><i>590</i>&nbsp;    }</b>
+<i>591</i>&nbsp;    //navigation
+<b class="nc"><i>592</i>&nbsp;    spawnLocations = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>593</i>&nbsp;    fleePoints = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>594</i>&nbsp;    TiledMapTileLayer navigationLayer = (TiledMapTileLayer) map.getLayers().get(&quot;navigation_layer&quot;);</b>
+<b class="nc"><i>595</i>&nbsp;    for (int y = 0; y &lt; navigationLayer.getHeight(); y++) {</b>
+<b class="nc"><i>596</i>&nbsp;      for (int x = 0; x &lt; navigationLayer.getWidth(); x++) {</b>
+<b class="nc"><i>597</i>&nbsp;        Cell currentCell = navigationLayer.getCell(x, y);</b>
+<b class="nc"><i>598</i>&nbsp;        float[] cellCoordinates = {x * navigationLayer.getTileWidth(),</b>
+<b class="nc"><i>599</i>&nbsp;                                   y * navigationLayer.getTileHeight()};</b>
+<b class="nc"><i>600</i>&nbsp;        if (currentCell != null) {</b>
+<b class="nc"><i>601</i>&nbsp;          spawnLocations.add(cellCoordinates);</b>
+<b class="nc"><i>602</i>&nbsp;          if (currentCell.getTile().getId() == Tiles.FLEE_POINT.tileId) {</b>
+<b class="nc"><i>603</i>&nbsp;            fleePoints.add(cellCoordinates);</b>
+<i>604</i>&nbsp;          }
+<i>605</i>&nbsp;        }
+<i>606</i>&nbsp;      }
+<i>607</i>&nbsp;    }
+<i>608</i>&nbsp;    //demomode
+<b class="nc"><i>609</i>&nbsp;    this.demoMode = world.getBoolean(&quot;demoMode&quot;);</b>
+<b class="nc"><i>610</i>&nbsp;    if (demoMode) {</b>
+<b class="nc"><i>611</i>&nbsp;      camera.setToOrtho(false, 1920, 1080);</b>
+<b class="nc"><i>612</i>&nbsp;      player.sprite.setColor(1f, 1f, 1f, 0f);</b>
+<i>613</i>&nbsp;    }
+<b class="nc"><i>614</i>&nbsp;  }</b>
+<i>615</i>&nbsp;  //&lt;/changed&gt;
+<i>616</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-02-09 15:24</div>
+</div>
+</body>
+</html>

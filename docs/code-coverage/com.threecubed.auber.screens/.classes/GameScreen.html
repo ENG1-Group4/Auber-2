@@ -1,0 +1,329 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameScreen</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.threecubed.auber.screens</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameScreen (com.threecubed.auber.screens)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 121)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameScreen$$EnhancerByMockitoWithCGLIB$$1aee0805</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 121)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.threecubed.auber.screens;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.sql.Time;
+<i>4</i>&nbsp;import java.util.Date;
+<i>5</i>&nbsp;import java.util.logging.FileHandler;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>8</i>&nbsp;import com.badlogic.gdx.Input;
+<i>9</i>&nbsp;import com.badlogic.gdx.ScreenAdapter;
+<i>10</i>&nbsp;import com.badlogic.gdx.graphics.GL20;
+<i>11</i>&nbsp;import com.badlogic.gdx.graphics.g2d.Batch;
+<i>12</i>&nbsp;import com.badlogic.gdx.graphics.g2d.Sprite;
+<i>13</i>&nbsp;import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+<i>14</i>&nbsp;import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+<i>15</i>&nbsp;import com.threecubed.auber.AuberGame;
+<i>16</i>&nbsp;import com.threecubed.auber.World;
+<i>17</i>&nbsp;import com.threecubed.auber.entities.Civilian;
+<i>18</i>&nbsp;import com.threecubed.auber.entities.GameEntity;
+<i>19</i>&nbsp;import com.threecubed.auber.entities.Infiltrator;
+<i>20</i>&nbsp;import com.threecubed.auber.entities.Player;
+<i>21</i>&nbsp;import com.threecubed.auber.entities.PowerUp;
+<i>22</i>&nbsp;import com.threecubed.auber.entities.Projectile;
+<i>23</i>&nbsp;import com.threecubed.auber.ui.GameUi;
+<i>24</i>&nbsp;//&lt;changed&gt;
+<i>25</i>&nbsp;import com.badlogic.gdx.audio.Music;
+<i>26</i>&nbsp;import com.badlogic.gdx.files.FileHandle;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;import org.json.*;
+<i>29</i>&nbsp;//&lt;/changed&gt;
+<i>30</i>&nbsp;import org.w3c.dom.NameList;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;/**
+<i>33</i>&nbsp; * The main screen of the game, responsible for rendering entities and executing
+<i>34</i>&nbsp; * their functions.
+<i>35</i>&nbsp; *
+<i>36</i>&nbsp; * @author Daniel O&#39;Brien, Bogdan Bodnariu-Lescinschi
+<i>37</i>&nbsp; * @version 1.0
+<i>38</i>&nbsp; * @since 1.0
+<i>39</i>&nbsp; */
+<i>40</i>&nbsp;public class GameScreen extends ScreenAdapter {
+<i>41</i>&nbsp;  public World world;
+<i>42</i>&nbsp;  public AuberGame game;
+<i>43</i>&nbsp;  Sprite stars;
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;  // &lt;changed&gt;
+<b class="nc"><i>46</i>&nbsp;  private Music ambience = Gdx.audio.newMusic(Gdx.files.internal(&quot;audio/ambience.mp3&quot;));</b>
+<i>47</i>&nbsp;  // &lt;/changed&gt;
+<i>48</i>&nbsp;
+<b class="nc"><i>49</i>&nbsp;  SpriteBatch screenBatch = new SpriteBatch();</b>
+<i>50</i>&nbsp;  GameUi ui;
+<i>51</i>&nbsp;
+<b class="nc"><i>52</i>&nbsp;  int workingSystems = 0;</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;  /**
+<i>55</i>&nbsp;   * Initialise the game screen with the {@link AuberGame} object and add a few
+<i>56</i>&nbsp;   * entities.
+<i>57</i>&nbsp;   *
+<i>58</i>&nbsp;   * @param game     The game object
+<i>59</i>&nbsp;   * @param demoMode Whether the game should run in demo mode
+<i>60</i>&nbsp;   */
+<b class="nc"><i>61</i>&nbsp;  public GameScreen(AuberGame game, boolean demoMode) {</b>
+<b class="nc"><i>62</i>&nbsp;    this.game = game;</b>
+<b class="nc"><i>63</i>&nbsp;    ui = new GameUi(game);</b>
+<i>64</i>&nbsp;
+<b class="nc"><i>65</i>&nbsp;    world = new World(game, demoMode);</b>
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    // &lt;changed&gt;
+<b class="nc"><i>68</i>&nbsp;    ambience.play();</b>
+<b class="nc"><i>69</i>&nbsp;    ambience.setLooping(true);</b>
+<b class="nc"><i>70</i>&nbsp;    ambience.setVolume(0.95f);</b>
+<i>71</i>&nbsp;    //&lt;/changed&gt;
+<i>72</i>&nbsp;
+<b class="nc"><i>73</i>&nbsp;    for (int i = 0; i &lt; World.MAX_INFILTRATORS_IN_GAME; i++) {</b>
+<b class="nc"><i>74</i>&nbsp;      world.queueEntityAdd(new Infiltrator(world));</b>
+<b class="nc"><i>75</i>&nbsp;      world.infiltratorsAddedCount++;</b>
+<i>76</i>&nbsp;    }
+<b class="nc"><i>77</i>&nbsp;    for (int i = 0; i &lt; World.NPC_COUNT; i++) {</b>
+<b class="nc"><i>78</i>&nbsp;      world.queueEntityAdd(new Civilian(world));</b>
+<i>79</i>&nbsp;    }
+<i>80</i>&nbsp;
+<b class="nc"><i>81</i>&nbsp;    stars = game.atlas.createSprite(&quot;stars&quot;);</b>
+<b class="nc"><i>82</i>&nbsp;  }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;  @Override
+<i>85</i>&nbsp;  public void render(float deltaTime) {
+<b class="nc"><i>86</i>&nbsp;    if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {</b>
+<i>87</i>&nbsp;      // &lt;changed&gt;
+<b class="nc"><i>88</i>&nbsp;      ambience.stop();</b>
+<i>89</i>&nbsp;      // &lt;/changed&gt;
+<b class="nc"><i>90</i>&nbsp;      game.setScreen(new MenuScreen(game));</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;    // &lt;changed&gt;
+<b class="nc"><i>93</i>&nbsp;    if (Gdx.input.isKeyPressed(Input.Keys.F5)) {</b>
+<b class="nc"><i>94</i>&nbsp;      Date time = java.util.Calendar.getInstance().getTime();</b>
+<b class="nc"><i>95</i>&nbsp;      world.saveTime = time;</b>
+<b class="nc"><i>96</i>&nbsp;      saveGame(time.toString());</b>
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;    // &lt;/changed&gt;
+<i>99</i>&nbsp;    // Add any queued entities
+<b class="nc"><i>100</i>&nbsp;    world.updateEntities();</b>
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    // Set the background color
+<b class="nc"><i>103</i>&nbsp;    Gdx.gl.glClearColor(0, 0, 0, 1);</b>
+<b class="nc"><i>104</i>&nbsp;    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</b>
+<i>105</i>&nbsp;
+<b class="nc"><i>106</i>&nbsp;    screenBatch.begin();</b>
+<b class="nc"><i>107</i>&nbsp;    screenBatch.draw(stars, 0, 0);</b>
+<b class="nc"><i>108</i>&nbsp;    screenBatch.end();</b>
+<i>109</i>&nbsp;
+<b class="nc"><i>110</i>&nbsp;    OrthogonalTiledMapRenderer renderer = world.renderer;</b>
+<b class="nc"><i>111</i>&nbsp;    renderer.setView(world.camera);</b>
+<b class="nc"><i>112</i>&nbsp;    renderer.render(world.backgroundLayersIds);</b>
+<i>113</i>&nbsp;
+<b class="nc"><i>114</i>&nbsp;    Batch batch = renderer.getBatch();</b>
+<i>115</i>&nbsp;    // Iterate over all entities. Perform movement logic and render them.
+<b class="nc"><i>116</i>&nbsp;    batch.begin();</b>
+<b class="nc"><i>117</i>&nbsp;    world.infiltratorCount = 0;</b>
+<b class="nc"><i>118</i>&nbsp;    for (GameEntity entity : world.getEntities()) {</b>
+<b class="nc"><i>119</i>&nbsp;      entity.update(world);</b>
+<b class="nc"><i>120</i>&nbsp;      entity.render(batch, world.camera);</b>
+<i>121</i>&nbsp;
+<b class="nc"><i>122</i>&nbsp;      if (entity instanceof Player) {</b>
+<b class="nc"><i>123</i>&nbsp;        world.camera.position.set(entity.position.x, entity.position.y, 0);</b>
+<b class="nc"><i>124</i>&nbsp;        world.camera.update();</b>
+<b class="nc"><i>125</i>&nbsp;      } else if (entity instanceof Infiltrator) {</b>
+<b class="nc"><i>126</i>&nbsp;        Infiltrator infiltrator = (Infiltrator) entity;</b>
+<b class="nc"><i>127</i>&nbsp;        if (infiltrator.aiEnabled) {</b>
+<b class="nc"><i>128</i>&nbsp;          world.infiltratorCount += 1;</b>
+<i>129</i>&nbsp;        }
+<i>130</i>&nbsp;      }
+<b class="nc"><i>131</i>&nbsp;    }</b>
+<b class="nc"><i>132</i>&nbsp;    batch.end();</b>
+<b class="nc"><i>133</i>&nbsp;    renderer.render(world.foregroundLayersIds);</b>
+<i>134</i>&nbsp;
+<b class="nc"><i>135</i>&nbsp;    if (world.infiltratorCount &lt; World.MAX_INFILTRATORS_IN_GAME</b>
+<i>136</i>&nbsp;        &amp;&amp; world.infiltratorsAddedCount &lt; World.MAX_INFILTRATORS) {
+<b class="nc"><i>137</i>&nbsp;      Infiltrator newInfiltrator = new Infiltrator(world);</b>
+<b class="nc"><i>138</i>&nbsp;      while (newInfiltrator.entityOnScreen(world)) {</b>
+<b class="nc"><i>139</i>&nbsp;        newInfiltrator.moveToRandomLocation(world);</b>
+<i>140</i>&nbsp;      }
+<b class="nc"><i>141</i>&nbsp;      world.queueEntityAdd(newInfiltrator);</b>
+<b class="nc"><i>142</i>&nbsp;      world.infiltratorsAddedCount++;</b>
+<i>143</i>&nbsp;    }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    // Draw the UI
+<b class="nc"><i>146</i>&nbsp;    ui.render(world, screenBatch);</b>
+<b class="nc"><i>147</i>&nbsp;    world.checkForEndState();</b>
+<b class="nc"><i>148</i>&nbsp;  }</b>
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;  @Override
+<i>151</i>&nbsp;  public void dispose() {
+<b class="nc"><i>152</i>&nbsp;    world.renderer.dispose();</b>
+<b class="nc"><i>153</i>&nbsp;    ambience.dispose();</b>
+<b class="nc"><i>154</i>&nbsp;  }</b>
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;  // &lt;changed&gt;
+<i>157</i>&nbsp;  /**
+<i>158</i>&nbsp;   * Saves the current state of the game to saves.json
+<i>159</i>&nbsp;   * entities.
+<i>160</i>&nbsp;   *
+<i>161</i>&nbsp;   * @param name    the name the file should be saved under
+<i>162</i>&nbsp;   */
+<i>163</i>&nbsp;  public void saveGame(String name) {
+<b class="nc"><i>164</i>&nbsp;    JSONObject store = new JSONObject();</b>
+<b class="nc"><i>165</i>&nbsp;    JSONArray civilians = new JSONArray();</b>
+<b class="nc"><i>166</i>&nbsp;    JSONArray infiltrators = new JSONArray();</b>
+<b class="nc"><i>167</i>&nbsp;    JSONArray powerUps = new JSONArray();</b>
+<b class="nc"><i>168</i>&nbsp;    JSONArray projectiles = new JSONArray();</b>
+<b class="nc"><i>169</i>&nbsp;    for (GameEntity entity : world.getEntities()) {</b>
+<b class="nc"><i>170</i>&nbsp;      if (entity instanceof Civilian) {</b>
+<b class="nc"><i>171</i>&nbsp;        Civilian _civilian = (Civilian) entity;</b>
+<b class="nc"><i>172</i>&nbsp;        civilians.put(_civilian.toJSON());</b>
+<i>173</i>&nbsp;      }
+<b class="nc"><i>174</i>&nbsp;      if (entity instanceof Infiltrator) {</b>
+<b class="nc"><i>175</i>&nbsp;        Infiltrator _infiltrator = (Infiltrator) entity;</b>
+<b class="nc"><i>176</i>&nbsp;        infiltrators.put(_infiltrator.toJSON());</b>
+<i>177</i>&nbsp;      }
+<b class="nc"><i>178</i>&nbsp;      if (entity instanceof PowerUp) {</b>
+<b class="nc"><i>179</i>&nbsp;        PowerUp _powerUp = (PowerUp) entity;</b>
+<b class="nc"><i>180</i>&nbsp;        powerUps.put(_powerUp.toJSON());</b>
+<i>181</i>&nbsp;      }
+<b class="nc"><i>182</i>&nbsp;      if (entity instanceof Projectile) {</b>
+<b class="nc"><i>183</i>&nbsp;        Projectile _projectile = (Projectile) entity;</b>
+<b class="nc"><i>184</i>&nbsp;        projectiles.put(_projectile.toJSON());</b>
+<i>185</i>&nbsp;      }
+<b class="nc"><i>186</i>&nbsp;    }</b>
+<b class="nc"><i>187</i>&nbsp;    store.put(&quot;civilians&quot;, civilians);</b>
+<b class="nc"><i>188</i>&nbsp;    store.put(&quot;infiltrators&quot;, infiltrators);</b>
+<b class="nc"><i>189</i>&nbsp;    store.put(&quot;powerUps&quot;, powerUps);</b>
+<b class="nc"><i>190</i>&nbsp;    store.put(&quot;projectiles&quot;, projectiles);</b>
+<b class="nc"><i>191</i>&nbsp;    store.put(&quot;world&quot;, world.toJSON());</b>
+<b class="nc"><i>192</i>&nbsp;    FileHandle file = Gdx.files.local(&quot;saves.json&quot;);</b>
+<b class="nc"><i>193</i>&nbsp;    JSONObject saves = new JSONObject(file.readString());</b>
+<b class="nc"><i>194</i>&nbsp;    saves.put(name,store);</b>
+<b class="nc"><i>195</i>&nbsp;    file.writeString(saves.toString(), false);</b>
+<b class="nc"><i>196</i>&nbsp;  }</b>
+<i>197</i>&nbsp;  /**
+<i>198</i>&nbsp;   * Creates a game form a given state
+<i>199</i>&nbsp;   * 
+<i>200</i>&nbsp;   * @param game    The game object
+<i>201</i>&nbsp;   * @param name    the name of the file which should be loaded from
+<i>202</i>&nbsp;   */
+<b class="nc"><i>203</i>&nbsp;  public GameScreen(AuberGame game,String name){</b>
+<b class="nc"><i>204</i>&nbsp;    this.game = game;</b>
+<b class="nc"><i>205</i>&nbsp;    ui = new GameUi(game);</b>
+<b class="nc"><i>206</i>&nbsp;    stars = game.atlas.createSprite(&quot;stars&quot;);</b>
+<i>207</i>&nbsp;
+<b class="nc"><i>208</i>&nbsp;    JSONObject saves = new JSONObject(Gdx.files.local(&quot;saves.json&quot;).readString());</b>
+<b class="nc"><i>209</i>&nbsp;    JSONObject store = saves.getJSONObject(name);</b>
+<b class="nc"><i>210</i>&nbsp;    world = new World(game, store.getJSONObject(&quot;world&quot;));</b>
+<b class="nc"><i>211</i>&nbsp;    JSONArray civilians = store.getJSONArray(&quot;civilians&quot;);</b>
+<b class="nc"><i>212</i>&nbsp;    for (Object object : civilians) {</b>
+<b class="nc"><i>213</i>&nbsp;      JSONObject civilian = (JSONObject) object;</b>
+<b class="nc"><i>214</i>&nbsp;      world.addEntity(new Civilian(civilian,world));</b>
+<b class="nc"><i>215</i>&nbsp;    }</b>
+<b class="nc"><i>216</i>&nbsp;    JSONArray infiltrators = store.getJSONArray(&quot;infiltrators&quot;);</b>
+<b class="nc"><i>217</i>&nbsp;    for (Object object : infiltrators) {</b>
+<b class="nc"><i>218</i>&nbsp;      JSONObject infiltrator = (JSONObject) object;</b>
+<b class="nc"><i>219</i>&nbsp;      world.addEntity(new Infiltrator(infiltrator,world));</b>
+<b class="nc"><i>220</i>&nbsp;    }</b>
+<b class="nc"><i>221</i>&nbsp;    JSONArray powerUps = store.getJSONArray(&quot;powerUps&quot;);</b>
+<b class="nc"><i>222</i>&nbsp;    for (Object object : powerUps) {</b>
+<b class="nc"><i>223</i>&nbsp;      JSONObject powerUp = (JSONObject) object;</b>
+<b class="nc"><i>224</i>&nbsp;      world.addEntity(new PowerUp(powerUp,world));</b>
+<b class="nc"><i>225</i>&nbsp;    }</b>
+<b class="nc"><i>226</i>&nbsp;    JSONArray projectiles = store.getJSONArray(&quot;projectiles&quot;);</b>
+<b class="nc"><i>227</i>&nbsp;    for (Object object : projectiles) {</b>
+<b class="nc"><i>228</i>&nbsp;      JSONObject projectile = (JSONObject) object;</b>
+<b class="nc"><i>229</i>&nbsp;      world.addEntity(new Projectile(projectile,world));</b>
+<b class="nc"><i>230</i>&nbsp;    }</b>
+<b class="nc"><i>231</i>&nbsp;    ambience.play();</b>
+<b class="nc"><i>232</i>&nbsp;    ambience.setLooping(true);</b>
+<b class="nc"><i>233</i>&nbsp;    ambience.setVolume(0.7f);</b>
+<b class="nc"><i>234</i>&nbsp;  }</b>
+<i>235</i>&nbsp;  //&lt;/changed&gt;
+<i>236</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-02-09 15:24</div>
+</div>
+</body>
+</html>
