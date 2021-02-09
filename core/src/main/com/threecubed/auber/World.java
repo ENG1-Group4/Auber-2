@@ -36,7 +36,7 @@ import java.util.Date;
  * @since 1.0
  * */
 public class World {
-  private AuberGame game;
+  public AuberGame game;
 
   public Player player;
   public int infiltratorCount;
@@ -86,7 +86,7 @@ public class World {
   /** Number of infiltrators added, including defeated ones. */
   public int infiltratorsAddedCount = 0;
 
-  private List<GameEntity> entities = new ArrayList<>();
+  public List<GameEntity> entities = new ArrayList<>();
   public List<GameEntity> newEntities = new ArrayList<>();
   public List<GameEntity> oldEntities = new ArrayList<>();
 
@@ -102,10 +102,10 @@ public class World {
   public RectangleMapObject medbay;
   public ArrayList<float[]> spawnLocations;
 
-  public final Random randomNumberGenerator = new Random();
+  public Random randomNumberGenerator = new Random();
 
   // ------------------NAVIGATION----------------
-  public final NavigationMesh navigationMesh = new NavigationMesh(
+  public NavigationMesh navigationMesh = new NavigationMesh(
       (TiledMapTileLayer) map.getLayers().get("navigation_layer")
       );
   public ArrayList<float[]> fleePoints;

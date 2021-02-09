@@ -70,7 +70,6 @@ public class Projectile extends GameEntity {
         return;
       }
     }
-
     TiledMapTileLayer collisionLayer = (TiledMapTileLayer)
         World.map.getLayers().get("collision_layer");
 
