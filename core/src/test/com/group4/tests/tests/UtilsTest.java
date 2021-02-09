@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UtilsTest {
 
     @Test
-    public void randomFloatInRange() {
+    public void test_random_float_in_range() {
         Random generator = new Random();
         float[][] test = {{10.1f,21.1f},{21,22},{21.1f,21.2f}};
         for (float[] values:test) {
