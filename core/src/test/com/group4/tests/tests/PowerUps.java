@@ -5,19 +5,26 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.group4.tests.GdxTestRunner;
 import com.threecubed.auber.World;
+import com.threecubed.auber.entities.Infiltrator;
+import com.threecubed.auber.entities.Npc;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.entities.PowerUp;
 import com.threecubed.auber.pathfinding.NavigationMesh;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
 
 /**
  * Test that all powerups work
@@ -35,6 +42,13 @@ public class PowerUps {
 
     public static float INITIAL_PLAYER_HEALTH = 0.5f;
 
+    private void handleShot(Infiltrator inf){
+        if (inf.exposed){
+            inf.aiEnabled = false;
+        } else {
+            inf.exposed = true;
+        }
+    }
 
     @Before
     public void setUp(){
@@ -123,6 +137,40 @@ public class PowerUps {
     @Test
     public void test_boom_power_up(){
         PowerUp powerUp = new PowerUp(0,0, PowerUp.PowerUpEffect.BOOM, world);
+
+        Infiltrator revealed = mock(Infiltrator.class);
+        doAnswer(new Answer() {
+            public Object answer(InvocationOnMock invocation) {
+            handleShot((Infiltrator) invocation.getMock());
+            return null;
+        }}).when(revealed).handleTeleporterShot(world);
+        revealed.position = new Vector2(0,0);
+        revealed.exposed = false;
+        world.entities.add(revealed);
+
+        Infiltrator arrested = mock(Infiltrator.class);
+        doAnswer(new Answer() {
+            public Object answer(InvocationOnMock invocation) {
+            handleShot((Infiltrator) invocation.getMock());
+            return null;
+        }}).when(arrested).handleTeleporterShot(world);
+        arrested.position = new Vector2(240,240);
+        revealed.exposed = true;
+        revealed.aiEnabled = true;
+        world.entities.add(arrested);
+        
+        Infiltrator out_of_range = mock(Infiltrator.class);
+        doAnswer(new Answer() {
+            public Object answer(InvocationOnMock invocation) {
+            handleShot((Infiltrator) invocation.getMock());
+            return null;
+        }}).when(out_of_range).handleTeleporterShot(world);
+        out_of_range.position = new Vector2(10f + world.POWERUP_BOOM_RANGE,10f + world.POWERUP_BOOM_RANGE);
+        doNothing().when(out_of_range).navigateToNearestFleepoint(world);
+        out_of_range.exposed = true;
+        out_of_range.aiEnabled = true;
+        world.entities.add(out_of_range);
+
         powerUp.handleCollisionWithPlayer(world);
 
         assertFalse("The boom power up should not effect the players speed", world.player.fast);
@@ -131,7 +179,9 @@ public class PowerUps {
         assertEquals("The boom power up should not effect the health of the player", INITIAL_PLAYER_HEALTH, world.player.health, 0.001);
         assertEquals("The boom power up should not effect the max speed of the player", 2f, world.player.maxSpeed, 0.001);
 
-        //TODO: Test boom with NPC's in the world
+        assertEquals("The boom power up should reveal the unexposed infiltrator",true,revealed.exposed);
+        assertEquals("The boom power up should arrest the exposed infiltrator",false,arrested.aiEnabled);
+        assertEquals("The boom power up should not affect the infiltrator out of range",true,out_of_range.aiEnabled);
     }
 
     @Test
