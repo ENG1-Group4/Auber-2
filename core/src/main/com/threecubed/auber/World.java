@@ -102,7 +102,7 @@ public class World {
   public RectangleMapObject medbay;
   public ArrayList<float[]> spawnLocations;
 
-  public final Random randomNumberGenerator = new Random();
+  public Random randomNumberGenerator = new Random();
 
   // ------------------NAVIGATION----------------
   public NavigationMesh navigationMesh = new NavigationMesh(

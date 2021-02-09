@@ -159,7 +159,6 @@ public class PowerUp extends GameEntity {
       @Override
       public void run() {
         world.player.invinc = false;
-        System.out.println("FUCK YOU");
       }
     }, World.AUBER_BUFF_TIME,"invinc");
   }
