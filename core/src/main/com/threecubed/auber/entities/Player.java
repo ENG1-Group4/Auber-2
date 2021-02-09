@@ -329,13 +329,13 @@ public class Player extends GameEntity {
       }
     }
   }
-  private ArrayList<Task> tasks = new ArrayList();
+  public ArrayList<Task> tasks = new ArrayList();
   private ArrayList<String> taskEffects = new ArrayList();
   public void addTask(Task task,float delaySeconds,String effect){
     tasks.add(playerTimer.scheduleTask(task, delaySeconds));
     taskEffects.add(effect);
   }
-  private void filterTasks(){
+  public void filterTasks(){
     for (int i = tasks.size() - 1; i >= 0; i -= 1) {
       if (!tasks.get(i).isScheduled()){tasks.remove(i);taskEffects.remove(i);}
     }

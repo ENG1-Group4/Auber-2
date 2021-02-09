@@ -1,9 +1,8 @@
 sourceCompatibility = 1.7
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 dependencies {
     implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
-    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
 }
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/main" ]
 sourceSets.test.java.srcDirs = [ "src/test" ]
@@ -11,5 +10,9 @@ sourceSets.test.java.srcDirs = [ "src/test" ]
 eclipse.project.name = appName + "-core"
 
 test {
-    useJUnitPlatform()
+    workingDir("assets");
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }

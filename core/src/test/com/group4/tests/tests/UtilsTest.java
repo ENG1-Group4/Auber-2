@@ -1,16 +1,22 @@
-package com.group4.tests;
+package com.group4.tests.tests;
 
 import com.threecubed.auber.Utils;
-import org.junit.jupiter.api.Test;
-
+import org.junit.Test;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UtilsTest {
+/**
+ * Test the utility functions
+ *
+ * @author Robert Watts
+ * @version 1.0
+ * @since 2.0
+ * */
+public class UtilsTest {
 
     @Test
-    void randomFloatInRange() {
+    public void randomFloatInRange() {
         Random generator = new Random();
         float[][] test = {{10.1f,21.1f},{21,22},{21.1f,21.2f}};
         for (float[] values:test) {
