@@ -64,6 +64,10 @@ public class MenuScreen extends ScreenAdapter {
     spriteBatch = new SpriteBatch();
 
     //<changed>
+    if (!Gdx.files.local("saves.json").exists()){
+      Gdx.files.local("saves.json").writeString("{}", false);
+    }
+
     if (!menuMusic.isPlaying()){
       menuMusic.play();
       menuMusic.setVolume(0.2f);
