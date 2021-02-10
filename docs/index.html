@@ -39,6 +39,8 @@
             <p style="font-size: 130%"><u><b>Support Documents</b></u></p>
             <p><a href="assessment2/Req2.pdf" target="_blank">Req2.pdf</a></p>
             <p><a href="assessment2/RiskAssessment2.pdf" target="_blank">RiskAssessment2.pdf</a></p>
+            <p><a href="assessment2/Arch2.pdf" target="_blank">Arch2.pdf</a></p>
+            <p><a href="assessment2/Method2.pdf" target="_blank">Method2.pdf</a></p>
 
             <p style="padding-top: 20px"><a href="assessment2/WhiteBoxTesting.pdf" target="_blank">WhiteBoxTesting.pdf</a></p>
             <p><a href="assessment2/BlackBoxTesting.pdf" target="_blank">BlackBoxTesting.pdf</a></p>
@@ -130,7 +132,7 @@
                     item.id = item.innerHTML.toLowerCase().replace(' ', '-')
                 }
                 var indentation = (parseInt(item.tagName[1]) - 3) * 20
-                contentsBox.innerHTML += '<li style="padding-left: ' + indentation.toString() + 'px"><a href="#' + item.id + '">' + item.innerHTML + '</a></li>'
+                contentsBox.innerHTML += '<li style="padding-left: ' + indentation.toString() + 'px; padding-top:5px;"><a href="#' + item.id + '">' + item.innerHTML + '</a></li>'
             }
         </script>
     </body>
