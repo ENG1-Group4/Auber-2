@@ -44,7 +44,8 @@ public class Player extends GameEntity {
 
   /** Health of Auber - varies between 1 and 0. */
   public float health = 1;
-  /** <changed> protects from that many hits */
+  // <changed>
+  /** protects from that many hits */
   public int shield = 0;
   //</changed>
   public boolean confused = false;
@@ -315,7 +316,9 @@ public class Player extends GameEntity {
     }
     return output;
   }
-  /** <changed>
+
+  //<changed>
+  /**
    * attempt to damage the player
    * 
    * @param amount the amount to damage the player by if successful

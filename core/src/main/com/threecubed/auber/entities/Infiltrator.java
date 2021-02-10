@@ -64,6 +64,7 @@ public class Infiltrator extends Npc {
    * @param x The x position of the infiltrator
    * @param y The y position of the infiltrator
    * @param world The game world
+   * @param id the infiltrator Id
    * */
   public Infiltrator(float x, float y, World world,int id) {
     super(x, y, world);

@@ -43,7 +43,7 @@ public class LoadScreen extends ScreenAdapter {
    * Instantiate the screen with an {@link AuberGame} object.
    *
    * @param game The game object. 
-   * @param userWon Whether the user won or lost
+   * @param menuMusic Whether the user won or lost
    * */
   public LoadScreen(AuberGame game, Music menuMusic) {
     this.game = game;
